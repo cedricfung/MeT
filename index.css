@@ -1,0 +1,26 @@
+.CodeMirror {
+  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  font-size: 12px;
+  margin-bottom: 9px;
+  line-height: 1.5em;
+  color: #555555;
+  background-color: #FFFFFF;
+  border: 1px solid #E3E2E1;
+  height: auto;
+  box-shadow: 0 1px 1px rgba(65, 55, 45, 0.1) inset;
+}
+
+.CodeMirror-scroll {
+  min-height: 256px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  width: 100%
+}
+
+.CodeMirror .cm-header {
+  font-weight: normal;
+}
+
+.CodeMirror .cm-trailingspace {
+  background-color: #EFEFEF;
+}
