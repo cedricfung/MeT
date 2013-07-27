@@ -16,6 +16,7 @@
   <script type="text/javascript" src="libs/codemirror-3.14/addon/edit/trailingspace.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/mode/markdown/markdown.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/mode/gfm/gfm.js"></script>
+  <script type="text/javascript" src="libs/codemirror-3.14/mode/stex/stex.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/mode/diff/diff.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/mode/gas/gas.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/mode/clike/clike.js"></script>
@@ -35,12 +36,16 @@
   <script type="text/javascript" src="libs/codemirror-3.14/mode/javascript/javascript.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/mode/htmlmixed/htmlmixed.js"></script>
   <script type="text/javascript" src="libs/showdown/src/showdown.js"></script>
+  <script type="text/javascript" src="libs/showdown/src/extensions/mathjax.js"></script>
+  <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <script type="text/javascript" src="index.js"></script>
 </head>
 <body>
-  <div class="editor">
-    <textarea data-preview=".preview"></textarea>
+  <div class="container">
+    <div class="editor">
+      <textarea data-preview=".preview"></textarea>
+    </div>
+    <div class="preview"></div>
   </div>
-  <div class="preview"></div>
 </body>
 </html>

@@ -24,3 +24,20 @@
 .CodeMirror .cm-trailingspace {
   background-color: #EFEFEF;
 }
+
+.container {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.editor,
+.preview
+{
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  padding: 8px;
+  width: 50%;
+}
