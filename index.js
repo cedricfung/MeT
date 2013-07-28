@@ -1,4 +1,5 @@
 jQuery(function ($) { $(document).ready(function(){
+
   MathJax.Hub.processUpdateTime = 200;
   MathJax.Hub.processUpdateDelay = 15;
   MathJax.Hub.Config({
@@ -6,12 +7,21 @@ jQuery(function ($) { $(document).ready(function(){
     jax: ["input/TeX", "output/HTML-CSS"],
     tex: { extensions: ['color.js', 'extpfeil.js'] },
     tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(','\\)'] ],
-      displayMath: [ ['$$', '$$'], ['\\[','\\]'] ],
+      inlineMath: [],
+      displayMath: [],
     },
   });
 
-  var showdown = new Showdown.converter({extensions: ['mathjax']})
+  marked.setOptions({
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: true,
+    langPrefix: 'lang-'
+  });
 
   $('textarea').each(function (index, area) {
     var preview = $($(area).data('preview'));
@@ -28,7 +38,7 @@ jQuery(function ($) { $(document).ready(function(){
 
     editor.on('change', function(cm, args) {
       if (preview.length !== 0) {
-        preview.html(showdown.makeHtml(cm.getValue()));
+        preview.html(marked(cm.getValue()));
         MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
       }
     });
