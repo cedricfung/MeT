@@ -1,13 +1,62 @@
-.CodeMirror {
+*, *:visited, *:hover, *:active {
+  max-width: 100%;
+  outline: 0 none;
+}
+
+body {
+  background-color: #F7F7F7;
+}
+
+pre code {
+  display: block;
+  font-size: 12px;
+  line-height: 1.28em;
+  background: #F9F9F9;
+  padding: 4px;
+}
+
+blockquote {
+  border-left: 16px solid #F9f9F9;
+  margin-left: 0;
+  padding-left: 16px;
+}
+
+.container {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.editor,
+.preview
+{
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  padding: 16px;
+  width: 50%;
+}
+
+.editor {
+  padding-left: 8px;
+}
+
+.preview {
+  padding-right: 8px;
+}
+
+.CodeMirror ,
+.preview .post {
   font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
   font-size: 12px;
-  margin-bottom: 9px;
+  margin-bottom: 16px;
   line-height: 1.5em;
   color: #555555;
   background-color: #FFFFFF;
   border: 1px solid #E3E2E1;
   height: auto;
-  box-shadow: 0 1px 1px rgba(65, 55, 45, 0.1) inset;
+  box-shadow: 0 1px 1px rgba(165, 155, 165, 0.1) inset;
 }
 
 .CodeMirror-scroll {
@@ -25,19 +74,32 @@
   background-color: #EFEFEF;
 }
 
-.container {
-  padding: 0;
-  margin: 0;
-  width: 100%;
+.preview .post {
+  font-size: 14px;
+  padding: 0 8px;
+  min-height: 256px;
 }
 
-.editor,
-.preview
-{
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  float: left;
-  padding: 8px;
-  width: 50%;
+.preview .post > *:first-child {
+  margin-top: 2px;
+}
+
+.preview .post h1,
+.preview .post h2,
+.preview .post h3,
+.preview .post h4,
+.preview .post h5,
+.preview .post h6 {
+  font-family: sans-serif;
+  margin-top: 32px;
+}
+
+.preview .post h3,
+.preview .post h4 {
+  margin-top: 24px;
+}
+
+.preview .post h5,
+.preview .post h6 {
+  margin-top: 16px;
 }

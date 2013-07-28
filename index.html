@@ -7,10 +7,12 @@
   <meta name="description" content="Repo.IO is not just an editor!" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-  <link rel="stylesheet" href="libs/codemirror-3.14/lib/codemirror.css">
+  <link rel="stylesheet" href="libs/normalize.css" />
+  <link rel="stylesheet" href="libs/codemirror-3.14/lib/codemirror.css" />
   <link rel="stylesheet" href="index.css" />
   <script type="text/javascript" src="libs/jquery-2.0.3.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/lib/codemirror.js"></script>
+  <script type="text/javascript" src="libs/codemirror-3.14/addon/runmode/runmode.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/addon/mode/overlay.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/addon/edit/matchbrackets.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/addon/edit/trailingspace.js"></script>
@@ -41,10 +43,10 @@
 </head>
 <body>
   <div class="container">
-    <div class="editor">
-      <textarea data-preview=".preview"></textarea>
+    <div class="preview"><div class="post"></div></div>
+    <div class="editor" contenteditable="true" spellcheck="true">
+      <textarea data-preview=".preview .post"></textarea>
     </div>
-    <div class="preview"></div>
   </div>
 </body>
 </html>
