@@ -11,6 +11,7 @@
  */
 
 var block = {
+  space: /^ *$/,
   newline: /^\n+/,
   code: /^( {4}[^\n]+\n*)+/,
   fences: noop,
@@ -129,7 +130,7 @@ Lexer.lex = function(src, options) {
 Lexer.prototype.lex = function(src) {
   src = src
     .replace(/\r\n|\r/g, '\n')
-    .replace(/\t/g, '    ')
+    .replace(/\t/g, ' ')
     .replace(/\u00a0/g, ' ')
     .replace(/\u2424/g, '\n');
 
@@ -141,8 +142,7 @@ Lexer.prototype.lex = function(src) {
  */
 
 Lexer.prototype.token = function(src, top) {
-  var src = src.replace(/^ +$/gm, '')
-    , next
+  var next
     , loose
     , cap
     , bull
@@ -152,12 +152,28 @@ Lexer.prototype.token = function(src, top) {
     , i
     , l;
 
+  var block_begin = 0, block_len = 0;
+
   while (src) {
+    // space
+    if (cap = this.rules.space.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[0].length > 1) {
+        this.tokens.push({
+          begin: block_begin,
+          end: (block_begin += cap[0].length) - 1,
+          type: 'space'
+        });
+      }
+    }
+
     // newline
     if (cap = this.rules.newline.exec(src)) {
       src = src.substring(cap[0].length);
       if (cap[0].length > 1) {
         this.tokens.push({
+          begin: block_begin,
+          end: (block_begin += cap[0].length) - 1,
           type: 'space'
         });
       }
@@ -166,8 +182,11 @@ Lexer.prototype.token = function(src, top) {
     // code
     if (cap = this.rules.code.exec(src)) {
       src = src.substring(cap[0].length);
+      block_len = cap[0].length;
       cap = cap[0].replace(/^ {4}/gm, '');
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += block_len) - 1,
         type: 'code',
         text: !this.options.pedantic
           ? cap.replace(/\n+$/, '')
@@ -180,6 +199,8 @@ Lexer.prototype.token = function(src, top) {
     if (cap = this.rules.fences.exec(src)) {
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'code',
         lang: cap[2],
         text: cap[3]
@@ -191,6 +212,8 @@ Lexer.prototype.token = function(src, top) {
     if (cap = this.rules.math.exec(src)) {
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'math',
         mode: 'display',
         text: typeof cap[2] !== 'undefined' ? cap[2] : cap[3]
@@ -202,6 +225,8 @@ Lexer.prototype.token = function(src, top) {
     if (cap = this.rules.heading.exec(src)) {
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'heading',
         depth: cap[1].length,
         text: cap[2]
@@ -214,6 +239,8 @@ Lexer.prototype.token = function(src, top) {
       src = src.substring(cap[0].length);
 
       item = {
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'table',
         header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
         align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
@@ -245,6 +272,8 @@ Lexer.prototype.token = function(src, top) {
     if (cap = this.rules.lheading.exec(src)) {
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'heading',
         depth: cap[2] === '=' ? 1 : 2,
         text: cap[1]
@@ -256,6 +285,8 @@ Lexer.prototype.token = function(src, top) {
     if (cap = this.rules.hr.exec(src)) {
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'hr'
       });
       continue;
@@ -266,6 +297,8 @@ Lexer.prototype.token = function(src, top) {
       src = src.substring(cap[0].length);
 
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'blockquote_start'
       });
 
@@ -277,6 +310,8 @@ Lexer.prototype.token = function(src, top) {
       this.token(cap, top);
 
       this.tokens.push({
+        begin: block_begin - 1,
+        end: block_begin - 1,
         type: 'blockquote_end'
       });
 
@@ -289,6 +324,8 @@ Lexer.prototype.token = function(src, top) {
       bull = cap[2];
 
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'list_start',
         ordered: bull.length > 1
       });
@@ -351,6 +388,8 @@ Lexer.prototype.token = function(src, top) {
       }
 
       this.tokens.push({
+        begin: block_begin - 1,
+        end: block_begin - 1,
         type: 'list_end'
       });
 
@@ -361,6 +400,8 @@ Lexer.prototype.token = function(src, top) {
     if (cap = this.rules.html.exec(src)) {
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: this.options.sanitize
           ? 'paragraph'
           : 'html',
@@ -374,6 +415,8 @@ Lexer.prototype.token = function(src, top) {
     if (top && (cap = this.rules.def.exec(src))) {
       src = src.substring(cap[0].length);
       this.tokens.links[cap[1].toLowerCase()] = {
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         href: cap[2],
         title: cap[3]
       };
@@ -385,6 +428,8 @@ Lexer.prototype.token = function(src, top) {
       src = src.substring(cap[0].length);
 
       item = {
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'table',
         header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
         align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
@@ -418,6 +463,8 @@ Lexer.prototype.token = function(src, top) {
     if (top && (cap = this.rules.paragraph.exec(src))) {
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'paragraph',
         text: cap[1][cap[1].length-1] === '\n'
           ? cap[1].slice(0, -1)
@@ -431,6 +478,8 @@ Lexer.prototype.token = function(src, top) {
       // Top-level should never reach here.
       src = src.substring(cap[0].length);
       this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
         type: 'text',
         text: cap[0]
       });
@@ -852,12 +901,12 @@ Parser.prototype.tok = function() {
       return '';
     }
     case 'hr': {
-      return '<hr>\n';
+      return '<hr class="marked-block" data-range="[' + [this.token.begin, this.token.end] + ']">\n';
     }
     case 'heading': {
       return '<h'
         + this.token.depth
-        + '>'
+        + ' class="marked-block" data-range="[' + [this.token.begin, this.token.end] + ']">'
         + this.inline.output(this.token.text)
         + '</h'
         + this.token.depth
@@ -876,7 +925,7 @@ Parser.prototype.tok = function() {
         this.token.text = escape(this.token.text, true);
       }
 
-      return '<pre><code'
+      return '<pre class="marked-block" data-range="[' + [this.token.begin, this.token.end] + ']"><code'
         + (this.token.lang
         ? ' class="'
         + this.options.langPrefix
@@ -888,7 +937,10 @@ Parser.prototype.tok = function() {
         + '</code></pre>\n';
     }
     case 'math': {
-      return '<script type="math/tex; mode=' + this.token.mode + '">' + this.token.text + '</script>';
+      return '<script class="marked-block" data-range="['
+        + [this.token.begin, this.token.end]
+        + ']" type="math/tex; mode=' + this.token.mode + '">'
+        + this.token.text + '</script>';
     }
     case 'table': {
       var body = ''
@@ -923,24 +975,26 @@ Parser.prototype.tok = function() {
       }
       body += '</tbody>\n';
 
-      return '<table>\n'
+      return '<table class="marked-block" data-range="[' + [this.token.begin, this.token.end] + ']">\n'
         + body
         + '</table>\n';
     }
     case 'blockquote_start': {
-      var body = '';
+      var body = ''
+        , begin = this.token.begin;
 
       while (this.next().type !== 'blockquote_end') {
         body += this.tok();
       }
 
-      return '<blockquote>\n'
+      return '<blockquote class="marked-block" data-range="[' + [begin, this.token.end] + ']">\n'
         + body
         + '</blockquote>\n';
     }
     case 'list_start': {
       var type = this.token.ordered ? 'ol' : 'ul'
-        , body = '';
+        , body = ''
+        , begin = this.token.begin;
 
       while (this.next().type !== 'list_end') {
         body += this.tok();
@@ -948,7 +1002,7 @@ Parser.prototype.tok = function() {
 
       return '<'
         + type
-        + '>\n'
+        + ' class="marked-block" data-range="[' + [begin, this.token.end] + ']">\n'
         + body
         + '</'
         + type
@@ -984,12 +1038,12 @@ Parser.prototype.tok = function() {
         : this.token.text;
     }
     case 'paragraph': {
-      return '<p>'
+      return '<p class="marked-block" data-range="[' + [this.token.begin,this.token.end] + ']">'
         + this.inline.output(this.token.text)
         + '</p>\n';
     }
     case 'text': {
-      return '<p>'
+      return '<p class="marked-block" data-range="[' + [this.token.begin,this.token.end] + ']">'
         + this.parseText()
         + '</p>\n';
     }
