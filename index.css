@@ -80,10 +80,6 @@ blockquote {
   min-height: 256px;
 }
 
-.preview .post > *:first-child {
-  margin-top: 2px;
-}
-
 .preview .post h1,
 .preview .post h2,
 .preview .post h3,
@@ -102,4 +98,25 @@ blockquote {
 .preview .post h5,
 .preview .post h6 {
   margin-top: 16px;
+}
+
+.preview .post > h1:first-child {
+  margin-top: 16px;
+}
+
+.preview .post > h2:first-child,
+.preview .post > h3:first-child {
+  margin-top: 8px;
+}
+
+.preview .post > p:first-child,
+.preview .post > h4:first-child,
+.preview .post > h5:first-child,
+.preview .post > h6:first-child {
+  margin-top: 4px;
+}
+
+.preview .post > blockquote:first-child
+{
+  margin-top: 0px;
 }
