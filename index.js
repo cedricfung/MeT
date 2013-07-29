@@ -55,6 +55,12 @@ jQuery(function ($) { $(document).ready(function(){
     },
   });
 
+  $(window).on('load resize', function(evt) {
+    $('.CodeMirror-scroll, .preview .post').css({
+      'min-height': ($(window).height() - 36) + 'px'
+    });
+  });
+
   marked.setOptions({
     gfm: true,
     tables: true,
