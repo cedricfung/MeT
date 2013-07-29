@@ -46,7 +46,8 @@ blockquote {
   padding-right: 8px;
 }
 
-.CodeMirror ,
+.CodeMirror,
+.editor textarea,
 .preview .post {
   font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
   font-size: 12px;
@@ -58,6 +59,7 @@ blockquote {
   box-shadow: 0 1px 1px rgba(165, 155, 165, 0.1) inset;
 }
 
+.editor textarea,
 .CodeMirror-scroll {
   min-height: 256px;
   overflow-y: hidden;
