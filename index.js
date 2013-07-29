@@ -101,6 +101,10 @@ jQuery(function ($) { $(document).ready(function(){
       var div = $('<div/>');
       a = div.html(a).children();
       b = div.html(b).children();
+      if (a.length != b.length) {
+        return false;
+      }
+
       for (var i = 0; i < a.length; i++) {
         if (a[i].outerHTML !== b[i].outerHTML) {
           return false;
@@ -126,11 +130,11 @@ jQuery(function ($) { $(document).ready(function(){
             var block_n = $(blocks[i+1]);
             var bb = range(block)[0];
             var be = range(block)[1];
-            var ben = (block_n.length === 0) ? be + text.length : range(block_n)[1] + text.length;
+            var ben = (block_n.length === 0 ? be : range(block_n)[1]) + text.length - removed.length;
             var ce = from + args.text[0].length;
             if (from >= bb && from <= be+1) {
               var str = cm.getRange(cm.posFromIndex(bb), cm.posFromIndex(ben+1));
-              return marked(str, {}, function(err, htmlOut) {
+              marked(str, {}, function(err, htmlOut) {
                 if (err !== null) {
                   console.log("Markdown parse error: " + err);
                   return;
@@ -149,7 +153,11 @@ jQuery(function ($) { $(document).ready(function(){
                     var block = $(v);
                     if (i > 0) {
                       var prev = $(blocks[i-1]);
-                      if (range(block)[0] <= range(prev)[1]) {
+                      if (range(block)[0] < range(prev)[1] + 1) {
+                        var begin = range(prev)[1] + 1;
+                        var end = begin - range(block)[0] + range(block)[1];
+                        block.attr('data-range', '[' + [begin, end] + ']');
+                      } else if (range(block)[0] > range(prev)[1] + 1) {
                         var begin = range(prev)[1] + 1;
                         var end = begin - range(block)[0] + range(block)[1];
                         block.attr('data-range', '[' + [begin, end] + ']');
@@ -157,9 +165,15 @@ jQuery(function ($) { $(document).ready(function(){
                     }
                   });
                 }
-                console.log(htmlEqual(preview.html(),  marked(cm.getValue()))); // TODO this test won't work because MathJax
-                console.log(range(blocks.last())[1] == (cm.getValue().length - 1));
+                if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
+                    || (range(blocks.last())[1] != (cm.getValue().length - 1))) {
+                      alert("Markdown partial parse error!");
+                      console.log(preview.html());
+                      console.log(marked(cm.getValue()));
+                      console.log(cm.getValue().length);
+                    }
               });
+              return false;
             }
           });
         }
