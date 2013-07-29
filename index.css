@@ -1,10 +1,10 @@
-*, *:visited, *:hover, *:active {
-  max-width: 100%;
-  outline: 0 none;
-}
-
 body {
   background-color: #F7F7F7;
+}
+
+img,
+video {
+  max-width: 100%;
 }
 
 pre code {
