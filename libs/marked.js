@@ -929,7 +929,7 @@ Parser.prototype.tok = function() {
         this.token.text = escape(this.token.text, true);
       }
 
-      return '<pre class="marked-block" data-range="[' + [this.token.begin, this.token.end] + ']"><code'
+      return '<pre class="marked-code marked-block" data-range="[' + [this.token.begin, this.token.end] + ']"><code'
         + (this.token.lang
         ? ' class="'
         + this.options.langPrefix

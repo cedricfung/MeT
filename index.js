@@ -97,6 +97,7 @@ jQuery(function ($) { $(document).ready(function(){
   });
 
   var area = $('.editor textarea')[0];
+  var preview = $($(area).data('preview'));
   var editor = CodeMirror.fromTextArea(area, {
     mode: 'gfm',
     theme: 'default',
@@ -132,7 +133,7 @@ jQuery(function ($) { $(document).ready(function(){
   }, 8000);
 
   editor.on('change', function(cm, change) {
-    var preview = $($(area).data('preview'));
+    preview = $($(area).data('preview'));
     if (preview.length === 0) {
       return;
     }
@@ -220,22 +221,22 @@ jQuery(function ($) { $(document).ready(function(){
         }
 
         // Simple test begin
-        var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
-        var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
+        //var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
+        //var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
 
-        if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
-            || (blocks_total_len != (cm_total_len - 1))) {
-              console.log("error");
-              console.log(preview.html());
-              console.log(marked(cm.getValue()));
-              console.log(htmlEqual(preview.html(),  marked(cm.getValue())));
-              console.log(blocks.length);
-              console.log(blocks_total_len);
-              console.log(cm.getValue().length);
-              console.log(cm_total_len);
-              console.log("error end");
-              alert("Markdown partial parse error!");
-            }
+        //if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax and doBlockSync
+            //|| (blocks_total_len != (cm_total_len - 1))) {
+              //console.log("error");
+              //console.log(preview.html());
+              //console.log(marked(cm.getValue()));
+              //console.log(htmlEqual(preview.html(),  marked(cm.getValue())));
+              //console.log(blocks.length);
+              //console.log(blocks_total_len);
+              //console.log(cm.getValue().length);
+              //console.log(cm_total_len);
+              //console.log("error end");
+              //alert("Markdown partial parse error!");
+            //}
             // Simple test end
       });
 
@@ -243,5 +244,13 @@ jQuery(function ($) { $(document).ready(function(){
     } // for blocks
 
   }); // editor.on('change')
+
+
+  preview.on('mouseenter', '> .marked-block', function(evt) {
+    $(this).addClass('block-highlight');
+  });
+  preview.on('mouseleave', '> .marked-block', function(evt) {
+    $(this).removeClass('block-highlight');
+  });
 
 }); });

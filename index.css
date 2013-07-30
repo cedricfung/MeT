@@ -7,14 +7,6 @@ video {
   max-width: 100%;
 }
 
-pre code {
-  display: block;
-  font-size: 12px;
-  line-height: 1.28em;
-  background: #F9F9F9;
-  padding: 4px;
-}
-
 blockquote {
   border-left: 16px solid #F9f9F9;
   margin-left: 0;
@@ -75,6 +67,14 @@ blockquote {
   background-color: #EFEFEF;
 }
 
+.marked-code {
+  display: block;
+  font-size: 12px;
+  line-height: 1.28em;
+  background: #F9F9F9;
+  padding: 4px;
+}
+
 .preview .post {
   font-size: 14px;
   padding: 0 8px;
@@ -117,7 +117,10 @@ blockquote {
   margin-top: 4px;
 }
 
-.preview .post > blockquote:first-child
-{
+.preview .post > blockquote:first-child {
   margin-top: 0px;
+}
+
+.block-highlight {
+  background-color: #ffffAA;
 }
