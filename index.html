@@ -38,7 +38,19 @@
   <script type="text/javascript" src="libs/codemirror-3.14/mode/javascript/javascript.js"></script>
   <script type="text/javascript" src="libs/codemirror-3.14/mode/htmlmixed/htmlmixed.js"></script>
   <script type="text/javascript" src="libs/marked.js"></script>
-  <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.processUpdateTime = 1024;
+    MathJax.Hub.processUpdateDelay = 64;
+    MathJax.Hub.Config({
+      skipStartupTypeset: true,
+      showMathMenu: false,
+      jax: ["input/TeX", "output/SVG"],
+      extensions: ["tex2jax.js"],
+      tex2jax: { inlineMath: [], displayMath: [] },
+      "SVG": { blacker: 1, font: 'TeX' },
+    });
+  </script>
+  <script type="text/javascript" src="libs/MathJax-2.2/MathJax.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </head>
 <body>

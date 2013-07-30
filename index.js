@@ -61,18 +61,6 @@ jQuery(function ($) { $(document).ready(function(){
     };
   }());
 
-  MathJax.Hub.processUpdateTime = 200;
-  MathJax.Hub.processUpdateDelay = 15;
-  MathJax.Hub.Config({
-    skipStartupTypeset: true,
-    messageStyle: "none",
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex: { extensions: ['color.js', 'extpfeil.js'] },
-    tex2jax: {
-      inlineMath: [],
-      displayMath: [],
-    },
-  });
 
   $(window).on('load resize', function(evt) {
     $('.CodeMirror-scroll, .editor textarea, .preview .post').css({
@@ -225,19 +213,19 @@ jQuery(function ($) { $(document).ready(function(){
         //var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
 
         //if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax and doBlockSync
-            //|| (blocks_total_len != (cm_total_len - 1))) {
-              //console.log("error");
-              //console.log(preview.html());
-              //console.log(marked(cm.getValue()));
-              //console.log(htmlEqual(preview.html(),  marked(cm.getValue())));
-              //console.log(blocks.length);
-              //console.log(blocks_total_len);
-              //console.log(cm.getValue().length);
-              //console.log(cm_total_len);
-              //console.log("error end");
-              //alert("Markdown partial parse error!");
-            //}
-            // Simple test end
+        //|| (blocks_total_len != (cm_total_len - 1))) {
+        //console.log("error");
+        //console.log(preview.html());
+        //console.log(marked(cm.getValue()));
+        //console.log(htmlEqual(preview.html(),  marked(cm.getValue())));
+        //console.log(blocks.length);
+        //console.log(blocks_total_len);
+        //console.log(cm.getValue().length);
+        //console.log(cm_total_len);
+        //console.log("error end");
+        //alert("Markdown partial parse error!");
+        //}
+        // Simple test end
       });
 
       break;
