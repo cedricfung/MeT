@@ -142,10 +142,8 @@ jQuery(function ($) { $(document).ready(function(){
             //var t2 = f + text.length - removed.length;
             console.log({t: text.length, r: removed.length, f: f, t1: t1});
             if (from < 0 || from > f) from = f;
-            if (to < t1) {
-              to = t1;
-              relative += (text.length - removed.length);
-            }
+            if (to < t1) to = t1;
+            relative += (text.length - removed.length);
             //if (to < t2) to = t2;
           } while (args = args.next);
 
@@ -205,7 +203,7 @@ jQuery(function ($) { $(document).ready(function(){
                 }
 
                 var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
-                var cm_total_len = cm.getValue().replace(/^[\s|\n]*$/, '').length;
+                var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
 
                 if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
                     || (blocks_total_len != (cm_total_len - 1))) {
