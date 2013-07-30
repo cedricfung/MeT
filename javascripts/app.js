@@ -41,7 +41,7 @@ var libs = [
 ];
 
 require(libs, function($) {
-  require(['apps/index'], function(ed) {
+  require(['apps/ed'], function(ed) {
     var editor = '.editor textarea';
     var preview = '.preview .post';
 
