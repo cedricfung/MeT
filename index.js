@@ -1,5 +1,26 @@
 jQuery(function ($) { $(document).ready(function(){
 
+  var htmlEqual = function(a, b) {
+    var div = $('<div/>');
+    a = div.html(a).children();
+    b = div.html(b).children();
+    if (a.length != b.length) {
+      return false;
+    }
+
+    for (var i = 0; i < a.length; i++) {
+      if (a[i].outerHTML !== b[i].outerHTML) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  var range = function(el) {
+    return $.parseJSON(el.attr('data-range'));
+  };
+
   var getCMMode = (function () {
     var aliases = {
       html: "htmlmixed",
@@ -75,173 +96,152 @@ jQuery(function ($) { $(document).ready(function(){
     }
   });
 
-  $('textarea').each(function (index, area) {
-    var editor = CodeMirror.fromTextArea(area, {
-      mode: 'gfm',
-      theme: 'default',
-      tabSize: 2,
-      autofocus: true,
-      lineNumbers: false,
-      lineWrapping: true,
-      matchBrackets: true,
-      showTrailingSpace: true,
-      extraKeys: {
-        Tab: function(cm) {
-          if (cm.getSelection().length === 0) {
-            var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-            cm.replaceSelection(spaces, "end", "+input");
-          } else {
-            CodeMirror.commands.indentMore(cm);
-          }
-        },
-      }
-    });
-
-    var needFull = false;
-
-    var worker = new Worker("worker.js");
-    worker.addEventListener('message', function(e) {
-      var result = $('<div/>').html(e.data.text).children().length;
-      var current = $('> .marked-block', $($(area).data('preview'))).length;
-      if (result !== current) {
-        needFull = true;
-      }
-    }, false);
-
-    setInterval(function() {
-      var preview = $($(area).data('preview'));
-      worker.postMessage({cmd: 'check', text: editor.getValue()})
-    }, 5000);
-
-    var range = function(el) {
-      return $.parseJSON(el.attr('data-range'));
-    };
-
-    var htmlEqual = function(a, b) {
-      var div = $('<div/>');
-      a = div.html(a).children();
-      b = div.html(b).children();
-      if (a.length != b.length) {
-        return false;
-      }
-
-      for (var i = 0; i < a.length; i++) {
-        if (a[i].outerHTML !== b[i].outerHTML) {
-          return false;
-        }
-      }
-      return true;
-    };
-
-    editor.on('change', function(cm, args) {
-      var preview = $($(area).data('preview'));
-      if (preview.length !== 0) {
-        var _bb = null;
-        var from = -1, to = -1, relative = 0;
-        var blocks = $('> .marked-block', preview);
-        if (needFull || blocks.length === 0) {
-          preview.html(marked(cm.getValue()));
-          MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
-          needFull = false;
+  var area = $('.editor textarea')[0];
+  var editor = CodeMirror.fromTextArea(area, {
+    mode: 'gfm',
+    theme: 'default',
+    tabSize: 2,
+    autofocus: true,
+    lineNumbers: false,
+    lineWrapping: true,
+    matchBrackets: true,
+    showTrailingSpace: true,
+    extraKeys: {
+      Tab: function(cm) {
+        if (cm.getSelection().length === 0) {
+          var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+          cm.replaceSelection(spaces, "end", "+input");
         } else {
-          var base = range($(blocks[0]))[0];
-          if (base > 0) {
-            _bb = $('<div data-range="[' + [0,base-1] + ']" class="marked-block"></div>');
-            _bb.hide().insertBefore($(blocks[0]));
-            blocks = $('> .marked-block', preview);
-          }
-          console.log(args);
-          do {
-            var removed = args.removed.join("\n");
-            var text = args.text.join("\n");
-            var f = cm.indexFromPos(args.from);
-            var t1 = f + removed.length;
-            console.log({t: text.length, r: removed.length, f: f, t1: t1});
-            if (from < 0 || from > f) from = f;
-            if (to < t1) to = t1;
-            relative += (text.length - removed.length);
-          } while (args = args.next);
+          CodeMirror.commands.indentMore(cm);
+        }
+      },
+    }
+  });
 
-          console.log({from: from, to: to, relative: relative, base: base});
+  var needFullRender = false;
+  var worker = new Worker("worker.js");
+  worker.addEventListener('message', function(e) {
+    var result = $('<div/>').html(e.data.text).children().length;
+    var current = $('> .marked-block', $($(area).data('preview'))).length;
+    if (result !== current) {
+      needFullRender = true;
+    }
+  }, false);
+  setInterval(function() {
+    worker.postMessage({cmd: 'check', text: editor.getValue()})
+  }, 8000);
 
-          var start_block = -1, end_block = -1;
+  editor.on('change', function(cm, change) {
+    var preview = $($(area).data('preview'));
+    if (preview.length === 0) {
+      return;
+    }
+
+    var blocks = $('> .marked-block', preview);
+    var from = -1, to = -1, relative = 0, baseBlock = null;
+
+    if (needFullRender || blocks.length === 0) {
+      preview.html(marked(cm.getValue()));
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
+      needFullRender = false;
+      return;
+    }
+
+    var base = range($(blocks[0]))[0];
+    if (base > 0) {
+      baseBlock = $('<div data-range="[' + [0,base-1] + ']" class="marked-block"></div>');
+      baseBlock.hide().insertBefore($(blocks[0]));
+      Array.unshift(blocks, baseBlock);
+    }
+
+    do {
+      var removed = change.removed.join("\n");
+      var text = change.text.join("\n");
+      var f = cm.indexFromPos(change.from);
+      var t = f + removed.length;
+      if (from < 0 || from > f) from = f;
+      if (to < t) to = t;
+      relative += (text.length - removed.length);
+    } while (change = change.next);
+
+    var sb = -1, eb = -1;
+    for (var i = 0; i < blocks.length; i++) {
+      var block = $(blocks[i]);
+      if (range(block)[0] <= from && from <= range(block)[1]) {
+        sb = i;
+      }
+
+      if (range(block)[0] <= to && to <= range(block)[1]) {
+        eb = i;
+      }
+
+      if (i === blocks.length - 1) {
+        if (eb < 0) eb = i;
+        if (sb < 0) sb = i;
+      }
+
+      if (sb < 0 || eb < 0) {
+        continue;
+      }
+
+      if (sb - 1 >= 0) sb = sb - 1;
+      if (eb + 1 < blocks.length) eb = eb + 1;
+      var startBlock = $(blocks[sb]), endBlock = $(blocks[eb]);
+      var md = cm.getRange(cm.posFromIndex(range(startBlock)[0]), cm.posFromIndex(range(endBlock)[1] + relative + 1));
+
+      marked(md, {}, function(err, htmlOut) {
+        if (err !== null) {
+          console.log("Markdown parse error: " + err);
+          return;
+        }
+        for (i = sb + 1; i <= eb; i++) {
+          blocks[i].remove();
+        }
+        startBlock.replaceWith(htmlOut);
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]); // TODO should make the changed maths reproduce only?
+
+        blocks = $('> .marked-block', preview);
+        if (blocks.length !== 0) {
           $.each(blocks, function (i, v) {
             var block = $(v);
-            if (range(block)[0] <= from && from <= range(block)[1]) {
-              start_block = i;
-            }
-
-            if (range(block)[0] <= to && to <= range(block)[1]) {
-              end_block = i;
-            }
-
-            if (i === blocks.length - 1) {
-              if (end_block < 0) end_block = i;
-              if (start_block < 0) start_block = i;
-            }
-
-
-
-            if (start_block >= 0 && end_block >= 0) {
-              if (start_block - 1 >= 0) start_block = start_block - 1;
-              if (end_block + 1 < blocks.length) end_block = end_block + 1;
-              var sb = $(blocks[start_block]), eb = $(blocks[end_block]);
-              var str = cm.getRange(cm.posFromIndex(range(sb)[0]), cm.posFromIndex(range(eb)[1] + relative + 1));
-
-              marked(str, {}, function(err, htmlOut) {
-                if (err !== null) {
-                  console.log("Markdown parse error: " + err);
-                  return;
-                }
-                for (i = start_block + 1; i <= end_block; i++) {
-                  blocks[i].remove();
-                }
-                sb.replaceWith(htmlOut);
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]); // TODO should make the changed maths reproduce only?
-
-                blocks = $('> .marked-block', preview);
-                if (blocks.length !== 0) {
-                  $.each(blocks, function (i, v) {
-                    var block = $(v);
-                    if (i > 0) {
-                      var prev = $(blocks[i-1]);
-                      if (range(block)[0] !== range(prev)[1] + 1) {
-                        var begin = range(prev)[1] + 1;
-                        var end = begin - range(block)[0] + range(block)[1];
-                        block.attr('data-range', '[' + [begin, end] + ']');
-                      }
-                    }
-                  });
-                }
-                if (_bb !== null) {
-                  _bb.remove();
-                }
-
-                var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
-                var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
-
-                if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
-                    || (blocks_total_len != (cm_total_len - 1))) {
-                      console.log("error");
-                      console.log(preview.html());
-                      console.log(marked(cm.getValue()));
-                      console.log(htmlEqual(preview.html(),  marked(cm.getValue())));
-                      console.log(blocks.length);
-                      console.log(blocks_total_len);
-                      console.log(cm.getValue().length);
-                      console.log(cm_total_len);
-                      console.log("error end");
-                      alert("Markdown partial parse error!");
-                    }
-              });
-
-              return false;
+            if (i > 0) {
+              var prev = $(blocks[i-1]);
+              if (range(block)[0] !== range(prev)[1] + 1) {
+                var begin = range(prev)[1] + 1;
+                var end = begin - range(block)[0] + range(block)[1];
+                block.attr('data-range', '[' + [begin, end] + ']');
+              }
             }
           });
-
         }
-      }
-    });
-  });
+
+        if (baseBlock !== null) {
+          baseBlock.remove();
+        }
+
+        // Simple test begin
+        var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
+        var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
+
+        if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
+            || (blocks_total_len != (cm_total_len - 1))) {
+              console.log("error");
+              console.log(preview.html());
+              console.log(marked(cm.getValue()));
+              console.log(htmlEqual(preview.html(),  marked(cm.getValue())));
+              console.log(blocks.length);
+              console.log(blocks_total_len);
+              console.log(cm.getValue().length);
+              console.log(cm_total_len);
+              console.log("error end");
+              alert("Markdown partial parse error!");
+            }
+            // Simple test end
+      });
+
+      break;
+    } // for blocks
+
+  }); // editor.on('change')
 
 }); });
