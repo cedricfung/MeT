@@ -76,7 +76,6 @@ jQuery(function ($) { $(document).ready(function(){
   });
 
   $('textarea').each(function (index, area) {
-    var preview = $($(area).data('preview'));
     var editor = CodeMirror.fromTextArea(area, {
       mode: 'gfm',
       theme: 'default',
@@ -86,11 +85,14 @@ jQuery(function ($) { $(document).ready(function(){
       lineWrapping: true,
       matchBrackets: true,
       showTrailingSpace: true,
-      extraKeys: {
-        "Tab": function (cm) {
-          cm.replaceSelection("  ", "end");
-        },
-      }
+      //extraKeys: {
+        //"Tab": function (cm) {
+          // if selection
+          // then indentation
+          // else
+          // cm.replaceSelection("  ", "end");
+        //},
+      //}
     });
 
     var range = function(el) {
@@ -114,68 +116,127 @@ jQuery(function ($) { $(document).ready(function(){
     };
 
     editor.on('change', function(cm, args) {
+      console.log(cm.getRange({line:0, ch:0}, {line:0, ch:1}));
+      var preview = $($(area).data('preview'));
       if (preview.length !== 0) {
-        var removed = args.removed.join("\n");
-        var text = args.text.join("\n");
-        var from = cm.indexFromPos(args.from);
-        var to = cm.indexFromPos(args.to);
+        var base = /^\n*/.exec(cm.getValue())[0].length;
+        if (base === 1) base = 0;
+        var from = -1, to = -1, relative = 0;
         var blocks = $('> .marked-block', preview);
         if (blocks.length === 0) {
           preview.html(marked(cm.getValue()));
           MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
         } else {
           console.log(args);
+          do {
+            var removed = args.removed.join("\n");
+            var text = args.text.join("\n");
+            var f = cm.indexFromPos(args.from);
+            var t1 = f + removed.length;
+            //var t2 = f + text.length - removed.length;
+            console.log(args.from);
+            console.log(args.to);
+            console.log({t: text.length, r: removed.length, f: f, t1: t1});
+            if (from < 0 || from > f) from = f;
+            if (to < t1) {
+              to = t1;
+              relative += (text.length - removed.length);
+            }
+            //if (to < t2) to = t2;
+          } while (args = args.next);
+
+          console.log({from: from, to: to, relative: relative, base: base});
+
+          var start_block = -1, end_block = -1;
           $.each(blocks, function (i, v) {
             var block = $(v);
-            var block_n = $(blocks[i+1]);
-            var bb = range(block)[0];
-            var be = range(block)[1];
-            var ben = (block_n.length === 0 ? be : range(block_n)[1]) + text.length - removed.length;
-            var ce = from + args.text[0].length;
-            if (from >= bb && from <= be+1) {
-              var str = cm.getRange(cm.posFromIndex(bb), cm.posFromIndex(ben+1));
+            if (range(block)[0] <= from && from <= range(block)[1]) {
+              start_block = i;
+            }
+
+            if (range(block)[0] <= to && to <= range(block)[1]) {
+              end_block = i;
+              console.log("b end_block = " + end_block);
+            }
+
+            if (i === blocks.length - 1) {
+              if (end_block < 0) end_block = i;
+              if (start_block < 0) start_block = i;
+              console.log("l end_block = " + end_block);
+            }
+
+
+
+            if (start_block >= 0 && end_block >= 0) {
+            if (start_block - 1 >= 0) start_block = start_block - 1;
+            if (end_block + 1 < blocks.length) end_block = end_block + 1;
+              console.log("f end_block = " + end_block);
+            console.log(start_block, end_block);
+              var sb = $(blocks[start_block]), eb = $(blocks[end_block]);
+              console.log("sb : " + sb.html());
+              console.log("eb : " + eb.html());
+              var str = cm.getRange(cm.posFromIndex(range(sb)[0]), cm.posFromIndex(range(eb)[1] + relative + 1));
+              console.log(range(sb)[0], range(eb)[1]);
+              console.log(range(sb)[0], range(eb)[1] + relative);
+              console.log(str);
+
               marked(str, {}, function(err, htmlOut) {
                 if (err !== null) {
                   console.log("Markdown parse error: " + err);
                   return;
                 }
-
-                block.replaceWith(htmlOut);
-                if (block_n.length !== 0) {
-                  block_n.remove();
+                for (i = start_block + 1; i <= end_block; i++) {
+                  blocks[i].remove();
                 }
+                sb.replaceWith(htmlOut);
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]); // TODO should make the changed maths reproduce only?
 
                 blocks = $('> .marked-block', preview);
                 if (blocks.length !== 0) {
                   $.each(blocks, function (i, v) {
-                    var base = 0;
                     var block = $(v);
                     if (i > 0) {
                       var prev = $(blocks[i-1]);
-                      if (range(block)[0] < range(prev)[1] + 1) {
-                        var begin = range(prev)[1] + 1;
-                        var end = begin - range(block)[0] + range(block)[1];
-                        block.attr('data-range', '[' + [begin, end] + ']');
-                      } else if (range(block)[0] > range(prev)[1] + 1) {
+                      if (range(block)[0] !== range(prev)[1] + 1) {
                         var begin = range(prev)[1] + 1;
                         var end = begin - range(block)[0] + range(block)[1];
                         block.attr('data-range', '[' + [begin, end] + ']');
                       }
                     }
                   });
+                  $.each(blocks, function (i, v) {
+                    var block = $(v);
+                    if (i > 0) {
+                      var base2 = range($(blocks[0]))[0];
+                      var begin = range(block)[0] + base2;
+                      var end = range(block)[1] + base2;
+                      block.attr('data-range', '[' + [begin, end] + ']');
+                    } else {
+                      var begin = base;
+                      var end = base + range(block)[1] - range(block)[0];
+                      block.attr('data-range', '[' + [begin, end] + ']');
+                    }
+                  });
                 }
                 if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
                     || (range(blocks.last())[1] != (cm.getValue().length - 1))) {
-                      alert("Markdown partial parse error!");
+                      console.log("error");
                       console.log(preview.html());
                       console.log(marked(cm.getValue()));
                       console.log(cm.getValue().length);
+                      console.log("error end");
+                      alert("Markdown partial parse error!");
                     }
+
+                    // how about to  check the marked(cm.getValue) with $('> .marked-block') length every 5 seconds (check only when some modification occured, such as ```, which may change instructures, result in different blocks count, only in different blocks count, the above solutions can't detect, maybe I could find a better solution to address this issue!
+                    // Maybe I could benefit from new JS worker feature
+
               });
+
               return false;
             }
           });
+
         }
       }
     });
