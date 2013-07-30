@@ -85,14 +85,16 @@ jQuery(function ($) { $(document).ready(function(){
       lineWrapping: true,
       matchBrackets: true,
       showTrailingSpace: true,
-      //extraKeys: {
-        //"Tab": function (cm) {
-          // if selection
-          // then indentation
-          // else
-          // cm.replaceSelection("  ", "end");
-        //},
-      //}
+      extraKeys: {
+        Tab: function(cm) {
+          if (cm.getSelection().length === 0) {
+            var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+            cm.replaceSelection(spaces, "end", "+input");
+          } else {
+            CodeMirror.commands.indentMore(cm);
+          }
+        },
+      }
     });
 
     var range = function(el) {
@@ -109,8 +111,6 @@ jQuery(function ($) { $(document).ready(function(){
 
       for (var i = 0; i < a.length; i++) {
         if (a[i].outerHTML !== b[i].outerHTML) {
-          console.log(a[i].outerHTML.replace("\n", "HHHH"));
-          console.log(b[i].outerHTML.replace("\n", "HHHH"));
           return false;
         }
       }
@@ -118,7 +118,6 @@ jQuery(function ($) { $(document).ready(function(){
     };
 
     editor.on('change', function(cm, args) {
-      console.log(cm.getRange({line:0, ch:0}, {line:0, ch:1}));
       var preview = $($(area).data('preview'));
       if (preview.length !== 0) {
         var _bb = null;
@@ -141,8 +140,6 @@ jQuery(function ($) { $(document).ready(function(){
             var f = cm.indexFromPos(args.from);
             var t1 = f + removed.length;
             //var t2 = f + text.length - removed.length;
-            console.log(args.from);
-            console.log(args.to);
             console.log({t: text.length, r: removed.length, f: f, t1: t1});
             if (from < 0 || from > f) from = f;
             if (to < t1) {
@@ -163,29 +160,20 @@ jQuery(function ($) { $(document).ready(function(){
 
             if (range(block)[0] <= to && to <= range(block)[1]) {
               end_block = i;
-              console.log("b end_block = " + end_block);
             }
 
             if (i === blocks.length - 1) {
               if (end_block < 0) end_block = i;
               if (start_block < 0) start_block = i;
-              console.log("l end_block = " + end_block);
             }
 
 
 
             if (start_block >= 0 && end_block >= 0) {
-            if (start_block - 1 >= 0) start_block = start_block - 1;
-            if (end_block + 1 < blocks.length) end_block = end_block + 1;
-              console.log("f end_block = " + end_block);
-            console.log(start_block, end_block);
+              if (start_block - 1 >= 0) start_block = start_block - 1;
+              if (end_block + 1 < blocks.length) end_block = end_block + 1;
               var sb = $(blocks[start_block]), eb = $(blocks[end_block]);
-              console.log("sb : " + sb.html());
-              console.log("eb : " + eb.html());
               var str = cm.getRange(cm.posFromIndex(range(sb)[0]), cm.posFromIndex(range(eb)[1] + relative + 1));
-              console.log(range(sb)[0], range(eb)[1]);
-              console.log(range(sb)[0], range(eb)[1] + relative);
-              console.log(str);
 
               marked(str, {}, function(err, htmlOut) {
                 if (err !== null) {
