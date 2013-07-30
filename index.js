@@ -97,6 +97,22 @@ jQuery(function ($) { $(document).ready(function(){
       }
     });
 
+    var needFull = false;
+
+    var worker = new Worker("worker.js");
+    worker.addEventListener('message', function(e) {
+      var result = $('<div/>').html(e.data.text).children().length;
+      var current = $('> .marked-block', $($(area).data('preview'))).length;
+      if (result !== current) {
+        needFull = true;
+      }
+    }, false);
+
+    setInterval(function() {
+      var preview = $($(area).data('preview'));
+      worker.postMessage({cmd: 'check', text: editor.getValue()})
+    }, 5000);
+
     var range = function(el) {
       return $.parseJSON(el.attr('data-range'));
     };
@@ -123,9 +139,10 @@ jQuery(function ($) { $(document).ready(function(){
         var _bb = null;
         var from = -1, to = -1, relative = 0;
         var blocks = $('> .marked-block', preview);
-        if (blocks.length === 0) {
+        if (needFull || blocks.length === 0) {
           preview.html(marked(cm.getValue()));
           MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
+          needFull = false;
         } else {
           var base = range($(blocks[0]))[0];
           if (base > 0) {
@@ -139,12 +156,10 @@ jQuery(function ($) { $(document).ready(function(){
             var text = args.text.join("\n");
             var f = cm.indexFromPos(args.from);
             var t1 = f + removed.length;
-            //var t2 = f + text.length - removed.length;
             console.log({t: text.length, r: removed.length, f: f, t1: t1});
             if (from < 0 || from > f) from = f;
             if (to < t1) to = t1;
             relative += (text.length - removed.length);
-            //if (to < t2) to = t2;
           } while (args = args.next);
 
           console.log({from: from, to: to, relative: relative, base: base});
@@ -218,10 +233,6 @@ jQuery(function ($) { $(document).ready(function(){
                       console.log("error end");
                       alert("Markdown partial parse error!");
                     }
-
-                    // how about to  check the marked(cm.getValue) with $('> .marked-block') length every 5 seconds (check only when some modification occured, such as ```, which may change instructures, result in different blocks count, only in different blocks count, the above solutions can't detect, maybe I could find a better solution to address this issue!
-                    // Maybe I could benefit from new JS worker feature
-
               });
 
               return false;
