@@ -1,4 +1,4 @@
-importScripts('libs/marked.js');
+importScripts('../libs/marked.js');
 
 marked.setOptions({
   gfm: true,

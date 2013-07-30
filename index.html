@@ -7,51 +7,9 @@
   <meta name="description" content="Repo.IO is not just an editor!" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-  <link rel="stylesheet" href="libs/normalize.css" />
-  <link rel="stylesheet" href="libs/codemirror-3.14/lib/codemirror.css" />
-  <link rel="stylesheet" href="index.css" />
-  <script type="text/javascript" src="libs/jquery-2.0.3.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/lib/codemirror.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/addon/runmode/runmode.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/addon/mode/overlay.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/addon/edit/matchbrackets.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/addon/edit/trailingspace.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/markdown/markdown.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/gfm/gfm.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/stex/stex.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/diff/diff.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/gas/gas.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/clike/clike.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/commonlisp/commonlisp.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/scheme/scheme.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/clojure/clojure.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/haskell/haskell.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/ocaml/ocaml.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/perl/perl.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/ruby/ruby.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/python/python.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/php/php.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/shell/shell.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/sql/sql.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/css/css.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/xml/xml.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/javascript/javascript.js"></script>
-  <script type="text/javascript" src="libs/codemirror-3.14/mode/htmlmixed/htmlmixed.js"></script>
-  <script type="text/javascript" src="libs/marked.js"></script>
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.processUpdateTime = 1024;
-    MathJax.Hub.processUpdateDelay = 64;
-    MathJax.Hub.Config({
-      skipStartupTypeset: true,
-      showMathMenu: false,
-      jax: ["input/TeX", "output/SVG"],
-      extensions: ["tex2jax.js"],
-      tex2jax: { inlineMath: [], displayMath: [] },
-      "SVG": { blacker: 1, font: 'TeX' },
-    });
-  </script>
-  <script type="text/javascript" src="libs/MathJax-2.2/MathJax.js"></script>
-  <script type="text/javascript" src="index.js"></script>
+  <link rel="stylesheet" href="stylesheets/libs/normalize.css" />
+  <link rel="stylesheet" href="javascripts/libs/codemirror-3.14/lib/codemirror.css" />
+  <link rel="stylesheet" href="stylesheets/index.css" />
 </head>
 <body>
   <div class="container">
@@ -59,4 +17,17 @@
     <div class="editor"><textarea data-preview=".preview .post"></textarea></div>
   </div>
 </body>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.processUpdateTime = 1024;
+  MathJax.Hub.processUpdateDelay = 64;
+  MathJax.Hub.Config({
+    skipStartupTypeset: true,
+    showMathMenu: false,
+    jax: ["input/TeX", "output/SVG"],
+    extensions: ["tex2jax.js"],
+    tex2jax: { inlineMath: [], displayMath: [] },
+    "SVG": { blacker: 1, font: 'TeX' },
+  });
+</script>
+<script data-main="javascripts/app.js" src="javascripts/require.js"></script>
 </html>

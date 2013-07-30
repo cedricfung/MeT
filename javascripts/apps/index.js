@@ -108,7 +108,7 @@ jQuery(function ($) { $(document).ready(function(){
   });
 
   var needFullRender = false;
-  var worker = new Worker("worker.js");
+  var worker = new Worker("javascripts/apps/worker.js");
   worker.addEventListener('message', function(e) {
     var result = $('<div/>').html(e.data.text).children().length;
     var current = $('> .marked-block', $($(area).data('preview'))).length;

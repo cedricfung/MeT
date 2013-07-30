@@ -4,7 +4,7 @@
  * https://github.com/chjj/marked
  */
 
-;(function() {
+//;(function() { //comment this to support require.js
 
 /**
  * Block-Level Grammar
@@ -1229,6 +1229,6 @@ if (typeof exports === 'object') {
   this.marked = marked;
 }
 
-}).call(function() {
-  return this || (typeof window !== 'undefined' ? window : global);
-}());
+//}).call(function() {
+  //return this || (typeof window !== 'undefined' ? window : global);
+//}());
