@@ -42,12 +42,18 @@ require([
     var editor = '.editor textarea';
     var preview = '.preview .post';
 
-    $(window).on('load resize', function(evt) {
+    var setupHeight = function() {
       $(['.CodeMirror-scroll', editor, preview].join(',')).css({
         'min-height': ($(window).height() - 36) + 'px'
       });
-    });
+    };
 
     ed(editor, preview);
+
+    $(setupHeight());
+    $(window).on('load resize', function(evt) {
+      setupHeight();
+    });
+
   });
 });
