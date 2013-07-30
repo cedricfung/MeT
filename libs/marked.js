@@ -164,6 +164,8 @@ Lexer.prototype.token = function(src, top) {
           end: (block_begin += cap[0].length) - 1,
           type: 'space'
         });
+      } else {
+        block_begin += cap[0].length;
       }
     }
 
@@ -176,6 +178,8 @@ Lexer.prototype.token = function(src, top) {
           end: (block_begin += cap[0].length) - 1,
           type: 'space'
         });
+      } else {
+        block_begin += cap[0].length;
       }
     }
 

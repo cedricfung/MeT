@@ -109,6 +109,8 @@ jQuery(function ($) { $(document).ready(function(){
 
       for (var i = 0; i < a.length; i++) {
         if (a[i].outerHTML !== b[i].outerHTML) {
+          console.log(a[i].outerHTML.replace("\n", "HHHH"));
+          console.log(b[i].outerHTML.replace("\n", "HHHH"));
           return false;
         }
       }
@@ -119,14 +121,19 @@ jQuery(function ($) { $(document).ready(function(){
       console.log(cm.getRange({line:0, ch:0}, {line:0, ch:1}));
       var preview = $($(area).data('preview'));
       if (preview.length !== 0) {
-        var base = /^\n*/.exec(cm.getValue())[0].length;
-        if (base === 1) base = 0;
+        var _bb = null;
         var from = -1, to = -1, relative = 0;
         var blocks = $('> .marked-block', preview);
         if (blocks.length === 0) {
           preview.html(marked(cm.getValue()));
           MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
         } else {
+          var base = range($(blocks[0]))[0];
+          if (base > 0) {
+            _bb = $('<div data-range="[' + [0,base-1] + ']" class="marked-block"></div>');
+            _bb.hide().insertBefore($(blocks[0]));
+            blocks = $('> .marked-block', preview);
+          }
           console.log(args);
           do {
             var removed = args.removed.join("\n");
@@ -204,19 +211,9 @@ jQuery(function ($) { $(document).ready(function(){
                       }
                     }
                   });
-                  $.each(blocks, function (i, v) {
-                    var block = $(v);
-                    if (i > 0) {
-                      var base2 = range($(blocks[0]))[0];
-                      var begin = range(block)[0] + base2;
-                      var end = range(block)[1] + base2;
-                      block.attr('data-range', '[' + [begin, end] + ']');
-                    } else {
-                      var begin = base;
-                      var end = base + range(block)[1] - range(block)[0];
-                      block.attr('data-range', '[' + [begin, end] + ']');
-                    }
-                  });
+                }
+                if (_bb !== null) {
+                  _bb.remove();
                 }
                 if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
                     || (range(blocks.last())[1] != (cm.getValue().length - 1))) {
