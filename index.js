@@ -203,12 +203,20 @@ jQuery(function ($) { $(document).ready(function(){
                 if (_bb !== null) {
                   _bb.remove();
                 }
+
+                var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
+                var cm_total_len = cm.getValue().replace(/^[\s|\n]*$/, '').length;
+
                 if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax
-                    || (range(blocks.last())[1] != (cm.getValue().length - 1))) {
+                    || (blocks_total_len != (cm_total_len - 1))) {
                       console.log("error");
                       console.log(preview.html());
                       console.log(marked(cm.getValue()));
+                      console.log(htmlEqual(preview.html(),  marked(cm.getValue())));
+                      console.log(blocks.length);
+                      console.log(blocks_total_len);
                       console.log(cm.getValue().length);
+                      console.log(cm_total_len);
                       console.log("error end");
                       alert("Markdown partial parse error!");
                     }
