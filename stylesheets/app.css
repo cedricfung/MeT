@@ -1,3 +1,6 @@
+@import url("libs/normalize.css");
+@import url("../javascripts/libs/codemirror-3.14/lib/codemirror.css");
+
 body {
   background-color: #F7F7F7;
 }

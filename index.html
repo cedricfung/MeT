@@ -7,9 +7,7 @@
   <meta name="description" content="Repo.IO is not just an editor!" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-  <link rel="stylesheet" href="stylesheets/libs/normalize.css" />
-  <link rel="stylesheet" href="javascripts/libs/codemirror-3.14/lib/codemirror.css" />
-  <link rel="stylesheet" href="stylesheets/index.css" />
+  <link rel="stylesheet" href="stylesheets/app.css" />
 </head>
 <body>
   <div class="container">
@@ -18,16 +16,18 @@
   </div>
 </body>
 <script type="text/x-mathjax-config">
-  MathJax.Hub.processUpdateTime = 1024;
-  MathJax.Hub.processUpdateDelay = 64;
-  MathJax.Hub.Config({
-    skipStartupTypeset: true,
-    showMathMenu: false,
-    jax: ["input/TeX", "output/SVG"],
-    extensions: ["tex2jax.js"],
-    tex2jax: { inlineMath: [], displayMath: [] },
-    "SVG": { blacker: 1, font: 'TeX' },
-  });
+MathJax.Hub.Config({
+  skipStartupTypeset: true,
+  showMathMenu: false,
+  jax: ["input/TeX", "output/SVG"],
+  extensions: ["tex2jax.js"],
+  tex2jax: { inlineMath: [], displayMath: [] },
+  "SVG": { blacker: 1, font: 'TeX' },
+});
+MathJax.Hub.processUpdateTime = 1024;
+MathJax.Hub.processUpdateDelay = 64;
+MathJax.Hub.Startup.MenuZoom = function () {};
 </script>
+<script type="text/javascript" src="javascripts/MathJax/MathJax.js"></script>
 <script data-main="javascripts/app.js" src="javascripts/require.js"></script>
 </html>
