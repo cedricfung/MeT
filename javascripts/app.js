@@ -9,7 +9,7 @@ require.config({
 });
 
 var libs = [
-  'jquery',
+  "jquery",
   "cm/lib/codemirror",
   "cm/addon/runmode/runmode",
   "cm/addon/mode/overlay",
@@ -41,5 +41,16 @@ var libs = [
 ];
 
 require(libs, function($) {
-  require(['apps/index']);
+  require(['apps/index'], function(ed) {
+    var editor = '.editor textarea';
+    var preview = '.preview .post';
+
+    $(window).on('load resize', function(evt) {
+      $(['.CodeMirror-scroll', editor, preview].join(',')).css({
+        'min-height': ($(window).height() - 36) + 'px'
+      });
+    });
+
+    ed(editor, preview);
+  });
 });
