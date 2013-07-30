@@ -122,5 +122,9 @@ blockquote {
 }
 
 .block-highlight {
-  background-color: #ffffAA;
+  background-color: #FFFFDD;
+}
+
+.block-current {
+  background-color: #FFFFAA;
 }

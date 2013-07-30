@@ -246,11 +246,38 @@ jQuery(function ($) { $(document).ready(function(){
   }); // editor.on('change')
 
 
+  var editorMarker = null;
+  editor.on('cursorActivity', function(cm) {
+    var pos = cm.indexFromPos(cm.getCursor());
+    if (editorMarker !== null) editorMarker.clear();
+    $('> .marked-block', preview).removeClass('block-current');
+    $('> .marked-block', preview).each(function (i, v) {
+      var b = $(v), r = range(b);
+      if (r[0] <= pos && pos <= r[1]) {
+        b.addClass('block-current');
+        return false;
+      }
+    });
+  }); // editor.on('cursoractivity')
+
+
   preview.on('mouseenter', '> .marked-block', function(evt) {
     $(this).addClass('block-highlight');
   });
   preview.on('mouseleave', '> .marked-block', function(evt) {
     $(this).removeClass('block-highlight');
+  });
+
+  preview.on('dblclick', '> .marked-block', function(evt) {
+    evt.preventDefault();
+    var posTop = editor.posFromIndex(range($(this))[0]);
+    var posBottom = editor.posFromIndex(range($(this))[1]);
+    var target = editor.charCoords(posTop).top;
+    $('html, body').animate({scrollTop: target}, 300);
+    if (editorMarker !== null) editorMarker.clear();
+    $('> .marked-block', preview).removeClass('block-current');
+    $(this).addClass('block-current');
+    editorMarker = editor.markText(posTop, posBottom, {className: 'block-current', clearOnEnter: true});
   });
 
 }); });
