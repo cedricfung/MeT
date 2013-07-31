@@ -3,7 +3,7 @@ require.config({
   paths: {
     apps: '../apps',
     jquery: 'jquery-2.0.3',
-    cm: 'codemirror-3.14',
+    cm: 'codemirror',
     marked: 'marked',
   },
 });
