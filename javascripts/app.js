@@ -38,7 +38,7 @@ require([
         "cm/mode/htmlmixed/htmlmixed",
         "marked"
 ], function($) {
-  require(['apps/ed'], function(ed) {
+  require(['apps/met'], function(met) {
     var editor = '.editor textarea';
     var preview = '.preview .post';
 
@@ -48,7 +48,7 @@ require([
       });
     };
 
-    ed(editor, preview);
+    met(editor, preview);
 
     $(setupHeight());
     $(window).on('load resize', function(evt) {

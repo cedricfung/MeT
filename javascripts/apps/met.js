@@ -61,22 +61,24 @@
     };
   }());
 
-  var setupWorker = function(ed) {
+  var setupWorker = function(met) {
     var worker = new Worker("javascripts/apps/worker.js");
     worker.addEventListener('message', function(e) {
       var result = $('<div/>').html(e.data.text).children().length;
-      var current = $(ed.mbsa).length;
+      var current = $(met.mbsa).length;
       if (result !== current) {
-        ed.needFullRender = true;
+        met.needFullRender = true;
       }
     }, false);
     setInterval(function() {
-      worker.postMessage({cmd: 'check', text: ed.editor.getValue()})
+      worker.postMessage({cmd: 'check', text: met.editor.getValue()})
     }, 8000);
   };
 
-  var ED = function(inputArea, previewArea) {
-    self = this;
+  var MeT = function(inputArea, previewArea) {
+    var self = this;
+    this.inputArea = inputArea;
+    this.previewArea = previewArea;
     this.mbs = '> .marked-block';
     this.mbsa = previewArea + ' ' + this.mbs;
     this.area = $(inputArea)[0];
@@ -141,15 +143,15 @@
     }
   };
 
-  var createED = function(inputArea, previewArea) {
-    var ed = new ED(inputArea, previewArea);
-    var mbs = ed.mbs;
-    var mbsa = ed.mbsa;
-    var area = $(inputArea)[0];
-    var preview = $(previewArea);
-    var editor = ed.editor;
+  MeT.prototype.met = function() {
+    var self = this;
+    var mbs = self.mbs;
+    var mbsa = self.mbsa;
+    var area = self.area;
+    var preview = self.preview;
+    var editor = self.editor;
 
-    setupWorker(ed);
+    setupWorker(self);
     marked.setOptions({
       gfm: true,
       tables: true,
@@ -167,7 +169,7 @@
     });
 
     editor.on('change', function(cm, change) {
-      preview = $(previewArea);
+      preview = $(self.previewArea);
       if (preview.length === 0) {
         return;
       }
@@ -175,10 +177,10 @@
       var blocks = $(mbs, preview);
       var from = -1, to = -1, relative = 0, baseBlock = null;
 
-      if (ed.needFullRender || blocks.length === 0) {
+      if (self.needFullRender || blocks.length === 0) {
         preview.html(marked(cm.getValue()));
         MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
-        ed.needFullRender = false;
+        self.needFullRender = false;
         return;
       }
 
@@ -272,6 +274,10 @@
 
   };
 
-  define(function() { return createED; });
+  define(function() {
+    return function(input, preview) {
+      new MeT(input, preview).met();
+    };
+  });
 
 }());
