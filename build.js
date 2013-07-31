@@ -7,8 +7,11 @@
     jquery: 'libs/jquery-2.0.3',
     marked: 'libs/marked',
     cm: 'libs/codemirror',
+    worker: 'apps/worker',
   },
   modules: [{
     name: "app",
+  }, {
+    name: "worker",
   }]
 })
