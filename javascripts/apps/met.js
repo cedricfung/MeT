@@ -106,18 +106,96 @@
     this.needFullRender = false;
     this.editorMarker = null;
 
+    var newTop = function(h1, t1, h2, t2) {
+      // moving h1 t1 to match h2 t2
+      return (h2 + t2) - (h1 + t1) + t1;
+    };
+
+    var lastTrackedRange = [0,0];
+
     self.editor.on('cursorActivity', function(cm) {
       var pos = cm.indexFromPos(cm.getCursor());
-      clearMarker();
       $(self.mbsa).each(function (i, v) {
         var b = $(v), r = range(b);
         if (r[0] <= pos && pos <= r[1]) {
+          if (lastTrackedRange[0] === r[0] && lastTrackedRange[1] === r[1]) {
+            return false;
+          }
+          clearMarker();
           b.addClass('block-current');
+          var h1 = b.position().top + b.height() * 0.5;
+          var t1 = $('.preview').position().top;
+          var h2 = (self.editor.charCoords(self.editor.posFromIndex(r[0]), 'local').top + self.editor.charCoords(self.editor.posFromIndex(r[1]), 'local').bottom) * 0.5;
+          var t2 = $('.editor').position().top;
+          var sTop = $('html, body').scrollTop();
+          var top = newTop(h1, t1, h2, t2);
+          sTop = sTop - 16 > 0 ? sTop - 16 : sTop;
+          top = top >= sTop ? sTop : top;
+          //  I should also take care of the top < 0 but editor is at 0
+          if (top >= 0) {
+            $('.preview').stop(true);
+            $('.preview').animate({top: top}, 300);
+          } else {
+            top = newTop(h2, t2, h1, t1);
+            sTop = $('html, body').scrollTop();
+            sTop = sTop + (top - t2);
+            $('.editor').stop(true);
+            $('.editor').animate({top: top}, 0);
+            $('html, body').stop(true);
+            $('html, body').animate({scrollTop: sTop}, 300);
+          }
+          lastTrackedRange = r;
           return false;
         }
       });
     });
 
+    self.preview.on('click', self.mbs, function(evt) {
+      evt.preventDefault();
+      var posTop = self.editor.posFromIndex(range($(this))[0]);
+      var posBottom = self.editor.posFromIndex(range($(this))[1]);
+      var h1 = (self.editor.charCoords(posTop, 'local').top + self.editor.charCoords(posBottom, 'local').bottom) * 0.5;
+      var t1 = $('.editor').position().top;
+      var h2 = $(this).position().top + $(this).height() * 0.5;
+      var t2 = $('.preview').position().top;
+      var sTop = $('html, body').scrollTop();
+      var top = newTop(h1, t1, h2, t2);
+
+      sTop = sTop - 16 > 0 ? sTop - 16 : sTop;
+      top = top >= sTop ? sTop : top;
+
+      if (top >= 0) {
+        $('.editor').stop(true);
+        $('.editor').animate({top: top}, 300);
+      } else {
+        top = newTop(h2, t2, h1, t1);
+        sTop = $('html, body').scrollTop();
+        sTop = sTop + (top - t2);
+        $('.preview').stop(true);
+        $('.preview').animate({top: top}, 0);
+        $('html, body').stop(true);
+        $('html, body').animate({scrollTop: sTop}, 300);
+      }
+      clearMarker();
+      $(this).addClass('block-current');
+      self.editorMarker = self.editor.markText(posTop, posBottom, {className: 'block-current', clearOnEnter: true});
+    });
+
+    $(document).on('scroll', function(evt) {
+      evt.preventDefault();
+      var sTop = $('html, body').scrollTop();
+      var posV = $('.preview').position().top;
+      var posE = $('.editor').position().top;
+      sTop = sTop - 16 > 0 ? sTop - 16 : sTop;
+      if (posV >= sTop) {
+        $('.preview').animate({top: sTop}, 16);
+        console.log("scrolled posV");
+      }
+      if (posE >= sTop) {
+        $('.editor').animate({top: sTop}, 16);
+        console.log("scrolled posE");
+      }
+    });
 
     self.preview.on('mouseenter', self.mbs, function(evt) {
       $(this).addClass('block-highlight');
@@ -126,21 +204,11 @@
       $(this).removeClass('block-highlight');
     });
 
-    self.preview.on('dblclick', self.mbs, function(evt) {
-      evt.preventDefault();
-      var posTop = self.editor.posFromIndex(range($(this))[0]);
-      var posBottom = self.editor.posFromIndex(range($(this))[1]);
-      var target = self.editor.charCoords(posTop).top;
-      $('html, body').animate({scrollTop: target}, 300);
-      clearMarker();
-      $(this).addClass('block-current');
-      self.editorMarker = self.editor.markText(posTop, posBottom, {className: 'block-current', clearOnEnter: true});
-    });
-
     var clearMarker = function() {
       if (self.editorMarker !== null) self.editorMarker.clear();
       $(self.mbsa).removeClass('block-current');
-    }
+    };
+
   };
 
   MeT.prototype.met = function() {
