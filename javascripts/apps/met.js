@@ -111,6 +111,28 @@
       return (h2 + t2) - (h1 + t1) + t1;
     };
 
+    var topPadding = parseInt($('.preview').css('padding-top'));
+
+    var syncTwo = function(sy1, sy2) {
+      var sTop = $('html, body').scrollTop();
+      var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t);
+      sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
+      top = top >= sTop ? sTop : top;
+      if (top >= 0) {
+        $(sy1.sel).stop(true);
+        $(sy1.sel).animate({top: top}, 300);
+      } else {
+        top = newTop(sy2.h, sy2.t, sy1.h, sy1.t);
+        top = top >= sTop ? sTop : top;
+        sTop = $('html, body').scrollTop();
+        sTop = sTop + (top - sy2.t);
+        $(sy2.sel).stop(true);
+        $(sy2.sel).animate({top: top}, 0);
+        $('html, body').stop(true);
+        $('html, body').animate({scrollTop: sTop}, 300);
+      }
+    };
+
     var lastTrackedRange = [0,0];
 
     self.editor.on('cursorActivity', function(cm) {
@@ -127,23 +149,7 @@
           var t1 = $('.preview').position().top;
           var h2 = (self.editor.charCoords(self.editor.posFromIndex(r[0]), 'local').top + self.editor.charCoords(self.editor.posFromIndex(r[1]), 'local').bottom) * 0.5;
           var t2 = $('.editor').position().top;
-          var sTop = $('html, body').scrollTop();
-          var top = newTop(h1, t1, h2, t2);
-          sTop = sTop - 16 > 0 ? sTop - 16 : sTop;
-          top = top >= sTop ? sTop : top;
-          //  I should also take care of the top < 0 but editor is at 0
-          if (top >= 0) {
-            $('.preview').stop(true);
-            $('.preview').animate({top: top}, 300);
-          } else {
-            top = newTop(h2, t2, h1, t1);
-            sTop = $('html, body').scrollTop();
-            sTop = sTop + (top - t2);
-            $('.editor').stop(true);
-            $('.editor').animate({top: top}, 0);
-            $('html, body').stop(true);
-            $('html, body').animate({scrollTop: sTop}, 300);
-          }
+          syncTwo({h: h1, t: t1, sel: '.preview'}, {h: h2, t: t2, sel: '.editor'});
           lastTrackedRange = r;
           return false;
         }
@@ -152,32 +158,20 @@
 
     self.preview.on('click', self.mbs, function(evt) {
       evt.preventDefault();
-      var posTop = self.editor.posFromIndex(range($(this))[0]);
-      var posBottom = self.editor.posFromIndex(range($(this))[1]);
+      var r = range($(this));
+      if (lastTrackedRange[0] === r[0] && lastTrackedRange[1] === r[1]) {
+        return false;
+      }
+      clearMarker();
+      $(this).addClass('block-current');
+      var posTop = self.editor.posFromIndex(r[0]);
+      var posBottom = self.editor.posFromIndex(r[1]);
       var h1 = (self.editor.charCoords(posTop, 'local').top + self.editor.charCoords(posBottom, 'local').bottom) * 0.5;
       var t1 = $('.editor').position().top;
       var h2 = $(this).position().top + $(this).height() * 0.5;
       var t2 = $('.preview').position().top;
-      var sTop = $('html, body').scrollTop();
-      var top = newTop(h1, t1, h2, t2);
-
-      sTop = sTop - 16 > 0 ? sTop - 16 : sTop;
-      top = top >= sTop ? sTop : top;
-
-      if (top >= 0) {
-        $('.editor').stop(true);
-        $('.editor').animate({top: top}, 300);
-      } else {
-        top = newTop(h2, t2, h1, t1);
-        sTop = $('html, body').scrollTop();
-        sTop = sTop + (top - t2);
-        $('.preview').stop(true);
-        $('.preview').animate({top: top}, 0);
-        $('html, body').stop(true);
-        $('html, body').animate({scrollTop: sTop}, 300);
-      }
-      clearMarker();
-      $(this).addClass('block-current');
+      syncTwo({h: h1, t: t1, sel: '.editor'}, {h: h2, t: t2, sel: '.preview'});
+      lastTrackedRange = r;
       self.editorMarker = self.editor.markText(posTop, posBottom, {className: 'block-current', clearOnEnter: true});
     });
 
@@ -186,13 +180,13 @@
       var sTop = $('html, body').scrollTop();
       var posV = $('.preview').position().top;
       var posE = $('.editor').position().top;
-      sTop = sTop - 16 > 0 ? sTop - 16 : sTop;
+      sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       if (posV >= sTop) {
-        $('.preview').animate({top: sTop}, 16);
+        $('.preview').animate({top: sTop}, topPadding);
         console.log("scrolled posV");
       }
       if (posE >= sTop) {
-        $('.editor').animate({top: sTop}, 16);
+        $('.editor').animate({top: sTop}, topPadding);
         console.log("scrolled posE");
       }
     });
