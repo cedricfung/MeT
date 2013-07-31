@@ -106,24 +106,23 @@
     this.needFullRender = false;
     this.editorMarker = null;
 
-    var newTop = function(h1, t1, h2, t2) {
+    var newTop = function(h1, t1, h2, t2, m) {
       // moving h1 t1 to match h2 t2
-      return (h2 + t2) - (h1 + t1) + t1;
+      var top = (h2 + t2) - (h1 + t1) + t1;
+      return (top >= m ? m : top);
     };
 
     var topPadding = parseInt($('.preview').css('padding-top'));
 
     var syncTwo = function(sy1, sy2) {
       var sTop = $('html, body').scrollTop();
-      var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t);
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
-      top = top >= sTop ? sTop : top;
+      var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t, sTop);
       if (top >= 0) {
         $(sy1.sel).stop(true);
         $(sy1.sel).animate({top: top}, 300);
       } else {
-        top = newTop(sy2.h, sy2.t, sy1.h, sy1.t);
-        top = top >= sTop ? sTop : top;
+        top = newTop(sy2.h, sy2.t, sy1.h, sy1.t, sTop);
         sTop = $('html, body').scrollTop();
         sTop = sTop + (top - sy2.t);
         $(sy2.sel).stop(true);
