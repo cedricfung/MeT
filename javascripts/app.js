@@ -36,24 +36,26 @@ require([
         "cm/mode/xml/xml",
         "cm/mode/javascript/javascript",
         "cm/mode/htmlmixed/htmlmixed",
-        "marked"
-], function($) {
-  require(['apps/met'], function(met) {
-    var editor = '.editor textarea';
-    var preview = '.preview .post';
+        "marked",
+        "apps/met",
+], function(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,
+            f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,
+            f21,f22,f23,f24,f25,f26,f27,f28,met) {
 
-    var setupHeight = function() {
-      $(['.CodeMirror-scroll', editor, preview].join(',')).css({
-        'min-height': ($(window).height() - 36) + 'px'
-      });
-    };
+  var editor = '.editor textarea';
+  var preview = '.preview .post';
 
-    met(editor, preview);
-
-    $(setupHeight());
-    $(window).on('load resize', function(evt) {
-      setupHeight();
+  var setupHeight = function() {
+    $(['.CodeMirror-scroll', editor, preview].join(',')).css({
+      'min-height': ($(window).height() - 36) + 'px'
     });
+  };
 
+  met(editor, preview);
+
+  $(setupHeight());
+  $(window).on('load resize', function(evt) {
+    setupHeight();
   });
+
 });

@@ -1,4 +1,4 @@
-(function() {
+(function() { define(['marked'], function(marked) {
 
   var htmlEqual = function(a, b) {
     var div = $('<div/>');
@@ -335,10 +335,8 @@
 
   };
 
-  define(function() {
-    return function(input, preview) {
-      new MeT(input, preview).met();
-    };
-  });
+  return function(input, preview) {
+    new MeT(input, preview).met();
+  };
 
-}());
+}); }());
