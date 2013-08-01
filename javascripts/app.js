@@ -1,10 +1,9 @@
 require.config({
-  baseUrl: 'javascripts/libs',
+  baseUrl: 'javascripts',
   paths: {
-    apps: '../apps',
-    jquery: 'jquery-2.0.3',
-    cm: 'codemirror',
-    marked: 'marked',
+    jquery: 'libs/jquery-2.0.3',
+    cm: 'libs/codemirror',
+    marked: 'libs/marked',
   },
 });
 
