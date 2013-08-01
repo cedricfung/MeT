@@ -17,17 +17,16 @@
   padding: 16px;
   width: 50%;
   position: absolute;
+  top: 0;
 }
 
 #editor {
   padding-left: 8px;
-  top: 0;
   right: 0;
 }
 
 #preview {
   padding-right: 8px;
-  top: 0;
   left: 0;
 }
 
@@ -35,17 +34,17 @@
 #editor textarea,
 #preview .post {
   background-color: #FFFFFF;
-  border: 1px solid #E3E2E1;
+  box-shadow: 0 1px 1px rgba(165, 165, 165, 0.1) inset;
+  border: 1px solid #EFEFEF;
   height: auto;
-  box-shadow: 0 1px 1px rgba(165, 155, 165, 0.1) inset;
 }
 
 #editor textarea,
 .CodeMirror-scroll {
   font-size: 12px;
   font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
-  line-height: 1.5em;
   color: #555555;
+  line-height: 1.5em;
   min-height: 256px;
   overflow-y: hidden;
   overflow-x: auto;
@@ -64,7 +63,7 @@ body {
   background-color: #F9f9F9;
   font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Helvetica Neue", "DejaVu Sans", "Verdana", "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
   font-size: 14px;
-  line-height: 1.5em;
+  line-height: 1.6em;
 }
 
 h1, h2, h3,
@@ -85,8 +84,14 @@ video {
 }
 
 em {
-  font-size: 12px;
+  font-size: 90%;
+  font-style: italic;
   padding: 0 2px;
+}
+
+b,
+strong {
+  font-size: 110%;
 }
 
 a {
@@ -149,27 +154,32 @@ code,
 .content h1,
 .content h2 {
   font-size: 200%;
-  margin-top: 8px;
+  margin: 32px 0 16px;
   padding-bottom: 2px;
-  border-bottom: 1px solid #E7E7E7;
+  border-bottom: 1px solid #EFEFEF;
 }
 
-.content * + h1,
-.content * + h2 {
-  margin: 32px 0 16px;
-}
 
 .content p,
 .content pre {
   margin-bottom: 16px;
 }
 
-.content pre,
-.content pre span {
-  line-height: 16px;
-}
-
 .content li {
   line-height: 22px;
   margin-bottom: 4px;
+}
+
+.content hr {
+  background-color: #A7A7A7;
+  border: 1px solid #A7A7A7;
+}
+
+.content p:first-child {
+  margin-top: 0;
+}
+
+.content h1:first-child,
+.content h2:first-child {
+  margin-top: 8px;
 }
