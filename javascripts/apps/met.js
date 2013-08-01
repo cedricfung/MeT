@@ -217,6 +217,7 @@
       gfm: true,
       tables: true,
       breaks: false,
+      blocks: true,
       pedantic: false,
       sanitize: true,
       smartLists: true,
