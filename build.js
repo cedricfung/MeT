@@ -1,6 +1,6 @@
 ({
   appDir: ".",
-  dir: "../repo.io/public/met",
+  dir: "../build/met",
   mainConfigFile: 'javascripts/app.js',
   modules: [{
     name: "app",
