@@ -57,7 +57,7 @@
     }
 
     return function (lang) {
-      return modes[lang] ? CodeMirror.getMode({}, modes[lang]) : 'clike';
+      return CodeMirror.getMode({}, modes[lang]);
     };
   }());
 

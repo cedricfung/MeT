@@ -1,26 +1,6 @@
 @import url("libs/normalize.css");
 @import url("../javascripts/libs/codemirror/lib/codemirror.css");
 
-body {
-  background-color: #F7F7F7;
-}
-
-img,
-video {
-  max-width: 100%;
-}
-
-blockquote {
-  border-left: 16px solid #F9f9F9;
-  margin-left: 0;
-  padding-left: 16px;
-}
-
-code {
-  background-color: #F9F9F9;
-  font-size: 12px;
-}
-
 .container {
   position: relative;
   padding: 0;
@@ -54,10 +34,6 @@ code {
 .CodeMirror,
 .editor textarea,
 .preview .post {
-  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
-  font-size: 12px;
-  line-height: 1.5em;
-  color: #555555;
   background-color: #FFFFFF;
   border: 1px solid #E3E2E1;
   height: auto;
@@ -66,6 +42,10 @@ code {
 
 .editor textarea,
 .CodeMirror-scroll {
+  font-size: 12px;
+  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  line-height: 1.5em;
+  color: #555555;
   min-height: 256px;
   overflow-y: hidden;
   overflow-x: auto;
@@ -80,11 +60,61 @@ code {
   background-color: #EFEFEF;
 }
 
-.marked-code {
-  display: block;
+body {
+  background-color: #F9f9F9;
+  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Helvetica Neue", "DejaVu Sans", "Verdana", "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+}
+
+h1, h2, h3,
+h4, h5, h6 {
+  font-family: "Russo One", "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Helvetica Neue", "DejaVu Sans", "Verdana", "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+  font-weight: normal;
+}
+
+blockquote {
+  border-left: 16px solid #F9f9F9;
+  margin-left: 8px;
+  padding-left: 16px;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+em {
   font-size: 12px;
-  line-height: 1.28em;
+  padding: 0 2px;
+}
+
+a {
+  color: #0088CC;
+  outline: 0 none;
+}
+
+a:focus,
+a:hover,
+a:visited {
+  color: #005580;
+  outline: 0 none;
+}
+
+a:hover {
+  color: #00AABB;
+}
+
+code,
+.marked-code {
+  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  font-size: 12px;
   background-color: #F9F9F9;
+  padding: 0 2px;
+}
+
+.marked-code {
+  line-height: 1.28em;
   padding: 4px;
 }
 
@@ -93,49 +123,8 @@ code {
 }
 
 .preview .post {
-  font-size: 14px;
   padding: 0 8px;
   min-height: 256px;
-}
-
-.preview .post h1,
-.preview .post h2,
-.preview .post h3,
-.preview .post h4,
-.preview .post h5,
-.preview .post h6 {
-  font-family: sans-serif;
-  margin-top: 32px;
-}
-
-.preview .post h3,
-.preview .post h4 {
-  margin-top: 24px;
-}
-
-.preview .post h5,
-.preview .post h6 {
-  margin-top: 16px;
-}
-
-.preview .post > h1:first-child {
-  margin-top: 16px;
-}
-
-.preview .post > h2:first-child,
-.preview .post > h3:first-child {
-  margin-top: 8px;
-}
-
-.preview .post > p:first-child,
-.preview .post > h4:first-child,
-.preview .post > h5:first-child,
-.preview .post > h6:first-child {
-  margin-top: 4px;
-}
-
-.preview .post > blockquote:first-child {
-  margin-top: 0px;
 }
 
 .block-highlight {
@@ -144,4 +133,43 @@ code {
 
 .block-current {
   background-color: #FFFFDD;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  font-size: 140%;
+  margin: 24px 0 12px;
+  line-height: 32px;
+}
+
+.content h1,
+.content h2 {
+  font-size: 200%;
+  margin-top: 8px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #E7E7E7;
+}
+
+.content * + h1,
+.content * + h2 {
+  margin: 32px 0 16px;
+}
+
+.content p,
+.content pre {
+  margin-bottom: 16px;
+}
+
+.content pre,
+.content pre span {
+  line-height: 16px;
+}
+
+.content li {
+  line-height: 22px;
+  margin-bottom: 4px;
 }
