@@ -1,15 +1,15 @@
 @import url("libs/normalize.css");
 @import url("../javascripts/libs/codemirror/lib/codemirror.css");
 
-.container {
+#container {
   position: relative;
   padding: 0;
   margin: 0;
   width: 100%;
 }
 
-.editor,
-.preview
+#editor,
+#preview
 {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -19,28 +19,28 @@
   position: absolute;
 }
 
-.editor {
+#editor {
   padding-left: 8px;
   top: 0;
   right: 0;
 }
 
-.preview {
+#preview {
   padding-right: 8px;
   top: 0;
   left: 0;
 }
 
 .CodeMirror,
-.editor textarea,
-.preview .post {
+#editor textarea,
+#preview .post {
   background-color: #FFFFFF;
   border: 1px solid #E3E2E1;
   height: auto;
   box-shadow: 0 1px 1px rgba(165, 155, 165, 0.1) inset;
 }
 
-.editor textarea,
+#editor textarea,
 .CodeMirror-scroll {
   font-size: 12px;
   font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
@@ -122,7 +122,7 @@ code,
   background-color: transparent;
 }
 
-.preview .post {
+#preview .post {
   padding: 0 8px;
   min-height: 256px;
 }

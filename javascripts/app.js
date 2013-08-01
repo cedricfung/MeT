@@ -45,8 +45,10 @@ require.config({
 
 require(['met'], function(met) {
 
-  var editor = '.editor textarea';
-  var preview = '.preview .post';
+  var editor = '#editor textarea';
+  var preview = '#preview .post';
+  var editorWrapper = '#editor';
+  var previewWrapper = '#preview';
 
   var setupHeight = function() {
     $(['.CodeMirror-scroll', editor, preview].join(',')).css({
@@ -54,7 +56,7 @@ require(['met'], function(met) {
     });
   };
 
-  met(editor, preview);
+  met(editor, preview, editorWrapper, previewWrapper);
 
   $(setupHeight());
   $(window).on('load resize', function(evt) {

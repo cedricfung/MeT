@@ -82,10 +82,12 @@
     worker.postMessage({cmd: 'parse', text: met.editor.getValue()});
   };
 
-  var MeT = function(inputArea, previewArea) {
+  var MeT = function(inputArea, previewArea, inputWrapper, previewWrapper) {
     var self = this;
     this.inputArea = inputArea;
     this.previewArea = previewArea;
+    this.inputWrapper = inputWrapper;
+    this.previewWrapper = previewWrapper;
     this.mbs = '> .marked-block';
     this.mbsa = previewArea + ' ' + this.mbs;
     this.area = $(inputArea)[0];
@@ -119,7 +121,7 @@
       return (top >= m ? m : top);
     };
 
-    var topPadding = parseInt($('.preview').css('padding-top'));
+    var topPadding = parseInt($(self.previewWrapper).css('padding-top'));
 
     var syncTwo = function(sy1, sy2) {
       var sTop = $('html, body').scrollTop();
@@ -152,10 +154,10 @@
           clearMarker();
           b.addClass('block-current');
           var h1 = b.position().top + b.height() * 0.5;
-          var t1 = $('.preview').position().top;
+          var t1 = $(self.previewWrapper).position().top;
           var h2 = (self.editor.charCoords(self.editor.posFromIndex(r[0]), 'local').top + self.editor.charCoords(self.editor.posFromIndex(r[1]), 'local').bottom) * 0.5;
-          var t2 = $('.editor').position().top;
-          syncTwo({h: h1, t: t1, sel: '.preview'}, {h: h2, t: t2, sel: '.editor'});
+          var t2 = $(self.inputWrapper).position().top;
+          syncTwo({h: h1, t: t1, sel: self.previewWrapper}, {h: h2, t: t2, sel: self.inputWrapper});
           lastTrackedRange = r;
           return false;
         }
@@ -177,10 +179,10 @@
       var posTop = self.editor.posFromIndex(r[0]);
       var posBottom = self.editor.posFromIndex(r[1]);
       var h1 = (self.editor.charCoords(posTop, 'local').top + self.editor.charCoords(posBottom, 'local').bottom) * 0.5;
-      var t1 = $('.editor').position().top;
+      var t1 = $(self.inputWrapper).position().top;
       var h2 = $(this).position().top + $(this).height() * 0.5;
-      var t2 = $('.preview').position().top;
-      syncTwo({h: h1, t: t1, sel: '.editor'}, {h: h2, t: t2, sel: '.preview'});
+      var t2 = $(self.previewWrapper).position().top;
+      syncTwo({h: h1, t: t1, sel: self.inputWrapper}, {h: h2, t: t2, sel: self.previewWrapper});
       lastTrackedRange = r;
       self.editorMarker = self.editor.markText(posTop, posBottom, {className: 'block-current', clearOnEnter: true});
     });
@@ -188,14 +190,14 @@
     $(document).on('scroll', function(evt) {
       evt.preventDefault();
       var sTop = $('html, body').scrollTop();
-      var posV = $('.preview').position().top;
-      var posE = $('.editor').position().top;
+      var posV = $(self.previewWrapper).position().top;
+      var posE = $(self.inputWrapper).position().top;
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       if (posV >= sTop) {
-        $('.preview').animate({top: sTop}, topPadding);
+        $(self.previewWrapper).animate({top: sTop}, topPadding);
       }
       if (posE >= sTop) {
-        $('.editor').animate({top: sTop}, topPadding);
+        $(self.inputWrapper).animate({top: sTop}, topPadding);
       }
     });
 
@@ -347,8 +349,8 @@
 
   };
 
-  return function(input, preview) {
-    new MeT(input, preview).met();
+  return function(input, preview, inputWrapper, previewWrapper) {
+    new MeT(input, preview, inputWrapper, previewWrapper).met();
   };
 
 }); }());
