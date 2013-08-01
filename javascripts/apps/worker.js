@@ -1,31 +1,25 @@
-importScripts('../require.js');
+importScripts('../libs/marked.js');
 
-require.config({
-  baseUrl: '../libs',
+marked.setOptions({
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: true,
+  langPrefix: 'lang-',
 });
 
-require(['marked'], function(marked){
-  marked.setOptions({
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: true,
-    langPrefix: 'lang-',
-  });
-
-  addEventListener('message', function(e) {
-    var data = e.data;
-    switch (data.cmd) {
-      case 'check': {
-        var result = marked(data.text);
-        postMessage({text: result});
-        break;
-      }
-      default:
-        break;
+addEventListener('message', function(e) {
+  var data = e.data;
+  switch (data.cmd) {
+    case 'check': {
+      var result = marked(data.text);
+      postMessage({text: result});
+      break;
     }
-  }, false);
-});
+    default:
+      break;
+  }
+}, false);
