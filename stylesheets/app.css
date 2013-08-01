@@ -88,6 +88,10 @@ code {
   padding: 4px;
 }
 
+.marked-code code {
+  background-color: transparent;
+}
+
 .preview .post {
   font-size: 14px;
   padding: 0 8px;
