@@ -13,11 +13,13 @@ marked.setOptions({
 });
 
 addEventListener('message', function(e) {
-  var data = e.data;
-  switch (data.cmd) {
-    case 'check': {
-      var result = marked(data.text);
-      postMessage({text: result});
+  switch (e.data.cmd) {
+    case 'parse': {
+      var result = marked(e.data.text);
+      postMessage({type: 'result', text: result});
+      setTimeout(function() {
+        postMessage({type: 'request'});
+      }, 2000);
       break;
     }
     default:

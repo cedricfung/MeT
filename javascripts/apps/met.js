@@ -64,15 +64,22 @@
   var setupWorker = function(met) {
     var worker = new Worker("javascripts/apps/worker.js");
     worker.addEventListener('message', function(e) {
-      var result = $('<div/>').html(e.data.text).children().length;
-      var current = $(met.mbsa).length;
-      if (result !== current) {
-        met.needFullRender = true;
+      switch (e.data.type) {
+        case 'result': {
+          var result = $('<div/>').html(e.data.text).children().length;
+          var current = $(met.mbsa).length;
+          if (result !== current) {
+            met.needFullRender = true;
+          }
+          break;
+        }
+        case 'request': {
+          worker.postMessage({cmd: 'parse', text: met.editor.getValue()});
+          break;
+        }
       }
     }, false);
-    setInterval(function() {
-      worker.postMessage({cmd: 'check', text: met.editor.getValue()})
-    }, 8000);
+    worker.postMessage({cmd: 'parse', text: met.editor.getValue()});
   };
 
   var MeT = function(inputArea, previewArea) {
