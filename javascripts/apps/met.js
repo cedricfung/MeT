@@ -162,6 +162,10 @@
       });
     });
 
+    self.preview.on('click', 'a', function(evt) {
+      evt.stopPropagation();
+    });
+
     self.preview.on('click', self.mbs, function(evt) {
       evt.preventDefault();
       var r = range($(this));
@@ -189,11 +193,9 @@
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       if (posV >= sTop) {
         $('.preview').animate({top: sTop}, topPadding);
-        console.log("scrolled posV");
       }
       if (posE >= sTop) {
         $('.editor').animate({top: sTop}, topPadding);
-        console.log("scrolled posE");
       }
     });
 
@@ -326,14 +328,16 @@
           }
 
           // Simple test begin
-          var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
-          var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
+          if (window.location.hostname === "localhost") {
+            var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
+            var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
 
-          if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax and doBlockSync
-              || (blocks_total_len != (cm_total_len - 1))) {
-                alert("Markdown partial parse error!");
-              }
-              // Simple test end
+            if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax and doBlockSync
+                || (blocks_total_len != (cm_total_len - 1))) {
+                  alert("Markdown partial parse error!");
+                }
+          }
+          // Simple test end
         });
 
         break;
