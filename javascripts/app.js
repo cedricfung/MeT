@@ -2,44 +2,48 @@ require.config({
   baseUrl: 'javascripts',
   paths: {
     jquery: 'libs/jquery-2.0.3',
-    cm: 'libs/codemirror',
     marked: 'libs/marked',
+    cmgfm: 'libs/codemirror/mode/gfm/gfm',
+    met: 'apps/met'
+  },
+  shim: {
+    cmgfm: {
+      exports: "CodeMirror",
+      deps: [
+        'libs/codemirror/lib/codemirror',
+        "libs/codemirror/addon/runmode/runmode",
+        "libs/codemirror/addon/mode/overlay",
+        "libs/codemirror/addon/edit/matchbrackets",
+        "libs/codemirror/addon/edit/trailingspace",
+        "libs/codemirror/mode/markdown/markdown",
+        "libs/codemirror/mode/stex/stex",
+        "libs/codemirror/mode/diff/diff",
+        "libs/codemirror/mode/gas/gas",
+        "libs/codemirror/mode/clike/clike",
+        "libs/codemirror/mode/commonlisp/commonlisp",
+        "libs/codemirror/mode/scheme/scheme",
+        "libs/codemirror/mode/clojure/clojure",
+        "libs/codemirror/mode/haskell/haskell",
+        "libs/codemirror/mode/ocaml/ocaml",
+        "libs/codemirror/mode/perl/perl",
+        "libs/codemirror/mode/ruby/ruby",
+        "libs/codemirror/mode/python/python",
+        "libs/codemirror/mode/php/php",
+        "libs/codemirror/mode/shell/shell",
+        "libs/codemirror/mode/sql/sql",
+        "libs/codemirror/mode/css/css",
+        "libs/codemirror/mode/xml/xml",
+        "libs/codemirror/mode/javascript/javascript",
+        "libs/codemirror/mode/htmlmixed/htmlmixed",
+      ]
+    },
+    met: {
+      deps: ['jquery', 'cmgfm', 'marked'],
+    },
   },
 });
 
-require([
-        "jquery",
-        "cm/lib/codemirror",
-        "cm/addon/runmode/runmode",
-        "cm/addon/mode/overlay",
-        "cm/addon/edit/matchbrackets",
-        "cm/addon/edit/trailingspace",
-        "cm/mode/markdown/markdown",
-        "cm/mode/gfm/gfm",
-        "cm/mode/stex/stex",
-        "cm/mode/diff/diff",
-        "cm/mode/gas/gas",
-        "cm/mode/clike/clike",
-        "cm/mode/commonlisp/commonlisp",
-        "cm/mode/scheme/scheme",
-        "cm/mode/clojure/clojure",
-        "cm/mode/haskell/haskell",
-        "cm/mode/ocaml/ocaml",
-        "cm/mode/perl/perl",
-        "cm/mode/ruby/ruby",
-        "cm/mode/python/python",
-        "cm/mode/php/php",
-        "cm/mode/shell/shell",
-        "cm/mode/sql/sql",
-        "cm/mode/css/css",
-        "cm/mode/xml/xml",
-        "cm/mode/javascript/javascript",
-        "cm/mode/htmlmixed/htmlmixed",
-        "marked",
-        "apps/met",
-], function(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,
-            f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,
-            f21,f22,f23,f24,f25,f26,f27,f28,met) {
+require(['met'], function(met) {
 
   var editor = '.editor textarea';
   var preview = '.preview .post';
