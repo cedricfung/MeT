@@ -5,7 +5,7 @@ rm -r ../build/met/
 node r.js -o build.js
 cd ../build/met/
 
-rm -r build.* r.js .git* docs
+rm -r build.* r.js .git* docs tests
 rm -r images/icon.xcf
 rm -r stylesheets/libs/
 rm -r javascripts/apps/met.js

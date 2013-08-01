@@ -9,7 +9,7 @@ marked.setOptions({
   sanitize: true,
   smartLists: true,
   smartypants: true,
-  langPrefix: 'lang-',
+  langPrefix: 'lang-'
 });
 
 addEventListener('message', function(e) {

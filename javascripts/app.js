@@ -34,13 +34,13 @@ require.config({
         "libs/codemirror/mode/css/css",
         "libs/codemirror/mode/xml/xml",
         "libs/codemirror/mode/javascript/javascript",
-        "libs/codemirror/mode/htmlmixed/htmlmixed",
+        "libs/codemirror/mode/htmlmixed/htmlmixed"
       ]
     },
     met: {
-      deps: ['jquery', 'cmgfm', 'marked'],
-    },
-  },
+      deps: ['jquery', 'cmgfm', 'marked']
+    }
+  }
 });
 
 require(['met'], function(met) {
@@ -59,7 +59,7 @@ require(['met'], function(met) {
   met(editor, preview, editorWrapper, previewWrapper);
 
   $(setupHeight());
-  $(window).on('load resize', function(evt) {
+  $(window).on('load resize', function() {
     setupHeight();
   });
 

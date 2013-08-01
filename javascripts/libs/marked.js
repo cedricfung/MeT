@@ -966,7 +966,7 @@ if (this.options.blocks) { // The patched version
       body += '</tr>\n</thead>\n';
 
       // body
-      body += '<tbody>\n'
+      body += '<tbody>\n';
       for (i = 0; i < this.token.cells.length; i++) {
         row = this.token.cells[i];
         body += '<tr>\n';
@@ -1113,7 +1113,7 @@ if (this.options.blocks) { // The patched version
       body += '</tr>\n</thead>\n';
 
       // body
-      body += '<tbody>\n'
+      body += '<tbody>\n';
       for (i = 0; i < this.token.cells.length; i++) {
         row = this.token.cells[i];
         body += '<tr>\n';
@@ -1265,7 +1265,7 @@ function marked(src, opt, callback) {
       , i = 0;
 
     try {
-      tokens = Lexer.lex(src, opt)
+      tokens = Lexer.lex(src, opt);
     } catch (e) {
       return callback(e);
     }

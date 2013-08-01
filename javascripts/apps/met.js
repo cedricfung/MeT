@@ -109,7 +109,7 @@
           } else {
             CodeMirror.commands.indentMore(cm);
           }
-        },
+        }
       }
     });
     this.needFullRender = false;
@@ -201,10 +201,10 @@
       }
     });
 
-    self.preview.on('mouseenter', self.mbs, function(evt) {
+    self.preview.on('mouseenter', self.mbs, function() {
       $(this).addClass('block-highlight');
     });
-    self.preview.on('mouseleave', self.mbs, function(evt) {
+    self.preview.on('mouseleave', self.mbs, function() {
       $(this).removeClass('block-highlight');
     });
 
@@ -219,7 +219,6 @@
     var self = this;
     var mbs = self.mbs;
     var mbsa = self.mbsa;
-    var area = self.area;
     var preview = self.preview;
     var editor = self.editor;
 
