@@ -1,4 +1,4 @@
-(function() { define(['marked'], function(marked) {
+(function() { define(['zepto', 'marked'], function($, marked) {
 
   var range = function(el) {
     return $.parseJSON(el.attr('data-range'));
@@ -72,8 +72,7 @@
     this.previewArea = previewArea;
     this.inputWrapper = inputWrapper;
     this.previewWrapper = previewWrapper;
-    this.mbs = '> .marked-block';
-    this.mbsa = previewArea + ' ' + this.mbs;
+    this.mbsa = previewArea + ' > .marked-block';
     this.area = $(inputArea)[0];
     this.preview = $(previewArea);
     this.editor = CodeMirror.fromTextArea(self.area, {
@@ -112,15 +111,12 @@
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t, sTop);
       if (top >= 0) {
-        $(sy1.sel).stop(true);
         $(sy1.sel).animate({top: top}, 300);
       } else {
         top = newTop(sy2.h, sy2.t, sy1.h, sy1.t, sTop);
         sTop = $('html, body').scrollTop();
         sTop = sTop + (top - sy2.t);
-        $(sy2.sel).stop(true);
         $(sy2.sel).animate({top: top}, 0);
-        $('html, body').stop(true);
         $('html, body').animate({scrollTop: sTop}, 300);
       }
     };
@@ -152,7 +148,7 @@
       evt.stopPropagation();
     });
 
-    self.preview.on('click', self.mbs, function(evt) {
+    self.preview.on('click', self.mbsa, function(evt) {
       evt.preventDefault();
       var r = range($(this));
       if (lastTrackedRange[0] === r[0] && lastTrackedRange[1] === r[1]) {
@@ -185,10 +181,10 @@
       }
     });
 
-    self.preview.on('mouseenter', self.mbs, function() {
+    self.preview.on('mouseenter', self.mbsa, function() {
       $(this).addClass('block-highlight');
     });
-    self.preview.on('mouseleave', self.mbs, function() {
+    self.preview.on('mouseleave', self.mbsa, function() {
       $(this).removeClass('block-highlight');
     });
 
@@ -205,7 +201,6 @@
 
   MeT.prototype.met = function() {
     var self = this;
-    var mbs = self.mbs;
     var mbsa = self.mbsa;
     var preview = self.preview;
     var editor = self.editor;
@@ -234,7 +229,7 @@
         return;
       }
 
-      var blocks = $(mbs, preview);
+      var blocks = $(mbsa);
       var from = -1, to = -1, relative = 0, baseBlock = null;
 
       if (self.needFullRender || blocks.length === 0) {
