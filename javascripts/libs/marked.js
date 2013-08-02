@@ -980,7 +980,7 @@ if (this.options.blocks) { // The patched version
       }
       body += '</tbody>\n';
 
-      return '<table class="marked-block" data-range="[' + [this.token.begin, this.token.end] + ']">\n'
+      return '<table class="marked-block table table-bordered table-striped" data-range="[' + [this.token.begin, this.token.end] + ']">\n'
         + body
         + '</table>\n';
     }

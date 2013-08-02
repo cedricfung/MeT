@@ -11,9 +11,6 @@
 #editor,
 #preview
 {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
   padding: 16px;
   width: 50%;
   position: absolute;
@@ -46,9 +43,16 @@
   color: #555555;
   line-height: 1.5em;
   min-height: 256px;
+  margin-bottom: -2px;
+  margin-right: 0;
+  padding-right: 0;
   overflow-y: hidden;
   overflow-x: auto;
   width: 100%
+}
+
+.CodeMirror pre {
+  padding: 0 2px 0 8px;
 }
 
 .CodeMirror .cm-header {
@@ -76,6 +80,11 @@ blockquote {
   border-left: 16px solid #F9f9F9;
   margin-left: 8px;
   padding-left: 16px;
+}
+
+blockquote p {
+  font-size: inherit;
+  line-height: inherit;
 }
 
 img,
@@ -110,12 +119,18 @@ a:hover {
   color: #00AABB;
 }
 
+code {
+  color: #16A700;
+}
+
 code,
 .marked-code {
   font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
   font-size: 12px;
   background-color: #F9F9F9;
   padding: 0 2px;
+  border-radius: 0;
+  border: 0 none;
 }
 
 .marked-code {
@@ -128,7 +143,7 @@ code,
 }
 
 #preview .post {
-  padding: 0 8px;
+  padding: 4px 8px;
   min-height: 256px;
 }
 
@@ -168,21 +183,11 @@ code,
   margin-bottom: 16px;
 }
 
-.content li {
-  line-height: 22px;
-  margin-bottom: 4px;
-}
-
-.content hr {
-  background-color: #A7A7A7;
-  border: 1px solid #A7A7A7;
-}
-
 .content p:first-child {
   margin-top: 0;
 }
 
 .content h1:first-child,
 .content h2:first-child {
-  margin-top: 8px;
+  margin-top: 2px;
 }
