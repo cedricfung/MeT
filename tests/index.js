@@ -1,12 +1,13 @@
 require.config({
   baseUrl: '../javascripts',
   paths: {
-    jquery: 'libs/jquery-2.0.3',
+    zepto: 'libs/zepto',
     marked: 'libs/marked',
     cmgfm: 'libs/codemirror/mode/gfm/gfm',
     met: 'apps/met'
   },
   shim: {
+    zepto: { exports: '$' },
     cmgfm: {
       exports: "CodeMirror",
       deps: [
@@ -38,12 +39,12 @@ require.config({
       ]
     },
     met: {
-      deps: ['jquery', 'cmgfm', 'marked']
+      deps: ['zepto', 'cmgfm', 'marked']
     }
   }
 });
 
-require(['met', 'marked'], function(met, marked) {
+require(['met', 'zepto', 'marked'], function(met, $, marked) {
 
   var docs = [
     'new/autolink_lines',
