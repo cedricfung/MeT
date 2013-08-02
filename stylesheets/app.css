@@ -1,4 +1,4 @@
-@import url("libs/normalize.css");
+@import url("libs/bootstrap.css");
 @import url("../javascripts/libs/codemirror/lib/codemirror.css");
 
 #container {
