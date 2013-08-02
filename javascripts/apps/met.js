@@ -107,24 +107,30 @@
     var topPadding = parseInt($(self.previewWrapper).css('padding-top'));
 
     var syncTwo = function(sy1, sy2) {
-      var sTop = $('html, body').scrollTop();
+      var sTop = $('html').scrollTop();
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t, sTop);
       if (top >= 0) {
         $(sy1.sel).animate({top: top}, 300);
       } else {
         top = newTop(sy2.h, sy2.t, sy1.h, sy1.t, sTop);
-        sTop = $('html, body').scrollTop();
+        sTop = $('html').scrollTop();
         sTop = sTop + (top - sy2.t);
-        $(sy2.sel).animate({top: top}, 0);
-        $('html, body').animate({scrollTop: sTop}, 300);
+        $(sy2.sel).animate({top: top}, 300, function() {
+          $('body').animate({scrollTop: sTop}, 0); // This doesn't work with Zepto
+        });
       }
     };
 
     var lastTrackedRange = [0,0];
+    var lastTrackedCursor = -1;
 
     self.editor.on('cursorActivity', function(cm) {
       var pos = cm.indexFromPos(cm.getCursor());
+      if (pos === lastTrackedCursor) {
+        return false;
+      }
+      lastTrackedCursor = pos;
       $(self.mbsa).each(function (i, v) {
         var b = $(v), r = range(b);
         if (r[0] <= pos && pos <= r[1]) {
@@ -169,7 +175,7 @@
 
     $(document).on('scroll', function(evt) {
       evt.preventDefault();
-      var sTop = $('html, body').scrollTop();
+      var sTop = $('html').scrollTop();
       var posV = $(self.previewWrapper).position().top;
       var posE = $(self.inputWrapper).position().top;
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
