@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MeT - The Markdown and LaTeX Editor You Should Have Met! | Repo.IO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="keywords" content="Markdown, LaTeX, TeX, Editor, Markdown Preview, LaTeX Preview, TeX Preview" />
+  <meta name="description" content="MeT the blazingly fast Markdown and LaTeX editor, with real-time preview. You can use it anytime, anywhere, from Linux, Mac OSX and Windows." />
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+  <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono|Quantico|Russo+One' />
+  <link rel="stylesheet" href="../stylesheets/app.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="preview"><div class="post content"></div></div>
+    <div id="editor"><textarea></textarea></div>
+  </div>
+</body>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  skipStartupTypeset: true,
+  showMathMenu: false,
+  messageStyle: "none",
+  jax: ["input/TeX", "output/SVG"],
+  extensions: ["tex2jax.js"],
+  tex2jax: { inlineMath: [], displayMath: [] },
+  "SVG": { blacker: 1, font: 'TeX' },
+});
+MathJax.Hub.processUpdateTime = 1024;
+MathJax.Hub.processUpdateDelay = 64;
+MathJax.Hub.Startup.MenuZoom = function () {};
+</script>
+<script type="text/javascript" src="../javascripts/MathJax/MathJax.js"></script>
+<script data-main="index.js" src="../javascripts/require.js"></script>
+</html>

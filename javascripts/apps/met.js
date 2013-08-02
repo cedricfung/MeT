@@ -1,22 +1,5 @@
 (function() { define(['marked'], function(marked) {
 
-  var htmlEqual = function(a, b) {
-    var div = $('<div/>');
-    a = div.html(a).children();
-    b = div.html(b).children();
-    if (a.length != b.length) {
-      return false;
-    }
-
-    for (var i = 0; i < a.length; i++) {
-      if (a[i].outerHTML !== b[i].outerHTML) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   var range = function(el) {
     return $.parseJSON(el.attr('data-range'));
   };
@@ -62,7 +45,8 @@
   }());
 
   var setupWorker = function(met) {
-    var worker = new Worker("javascripts/apps/worker.js");
+    var root = window.location.protocol + "//" + window.location.host;
+    var worker = new Worker(root +"/javascripts/apps/worker.js");
     worker.addEventListener('message', function(e) {
       switch (e.data.type) {
         case 'result': {
@@ -215,6 +199,10 @@
 
   };
 
+  MeT.prototype.getEditor = function() {
+    return this.editor;
+  };
+
   MeT.prototype.met = function() {
     var self = this;
     var mbs = self.mbs;
@@ -328,17 +316,6 @@
             baseBlock.remove();
           }
 
-          // Simple test begin
-          if (window.location.hostname === "localhost") {
-            var blocks_total_len = blocks.length === 0 ? -1 : range(blocks.last())[1];
-            var cm_total_len = blocks_total_len === -1 ? cm.getValue().replace(/^[\s|\n]*$/, '').length : cm.getValue().length;
-
-            if (!htmlEqual(preview.html(),  marked(cm.getValue())) // TODO this test won't work because MathJax and doBlockSync
-                || (blocks_total_len != (cm_total_len - 1))) {
-                  alert("Markdown partial parse error!");
-                }
-          }
-          // Simple test end
         });
 
         break;
@@ -346,10 +323,11 @@
 
     }); // editor.on('change')
 
+    return self;
   };
 
   return function(input, preview, inputWrapper, previewWrapper) {
-    new MeT(input, preview, inputWrapper, previewWrapper).met();
+    return new MeT(input, preview, inputWrapper, previewWrapper).met();
   };
 
 }); }());

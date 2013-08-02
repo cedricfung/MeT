@@ -1,0 +1,84 @@
+require.config({
+  baseUrl: '../javascripts',
+  paths: {
+    jquery: 'libs/jquery-2.0.3',
+    marked: 'libs/marked',
+    cmgfm: 'libs/codemirror/mode/gfm/gfm',
+    met: 'apps/met'
+  },
+  shim: {
+    cmgfm: {
+      exports: "CodeMirror",
+      deps: [
+        'libs/codemirror/lib/codemirror',
+        "libs/codemirror/addon/runmode/runmode",
+        "libs/codemirror/addon/mode/overlay",
+        "libs/codemirror/addon/edit/matchbrackets",
+        "libs/codemirror/addon/edit/trailingspace",
+        "libs/codemirror/mode/markdown/markdown",
+        "libs/codemirror/mode/stex/stex",
+        "libs/codemirror/mode/diff/diff",
+        "libs/codemirror/mode/gas/gas",
+        "libs/codemirror/mode/clike/clike",
+        "libs/codemirror/mode/commonlisp/commonlisp",
+        "libs/codemirror/mode/scheme/scheme",
+        "libs/codemirror/mode/clojure/clojure",
+        "libs/codemirror/mode/haskell/haskell",
+        "libs/codemirror/mode/ocaml/ocaml",
+        "libs/codemirror/mode/perl/perl",
+        "libs/codemirror/mode/ruby/ruby",
+        "libs/codemirror/mode/python/python",
+        "libs/codemirror/mode/php/php",
+        "libs/codemirror/mode/shell/shell",
+        "libs/codemirror/mode/sql/sql",
+        "libs/codemirror/mode/css/css",
+        "libs/codemirror/mode/xml/xml",
+        "libs/codemirror/mode/javascript/javascript",
+        "libs/codemirror/mode/htmlmixed/htmlmixed"
+      ]
+    },
+    met: {
+      deps: ['jquery', 'cmgfm', 'marked']
+    }
+  }
+});
+
+require(['met', 'marked'], function(met, marked) {
+
+  var editor = '#editor textarea';
+  var preview = '#preview .post';
+  var editorWrapper = '#editor';
+  var previewWrapper = '#preview';
+
+  var htmlEqual = function(a, b) {
+    var div = $('<div/>');
+    a = div.html(a).children();
+    b = div.html(b).children();
+    if (a.length != b.length) {
+      return false;
+    }
+
+    for (var i = 0; i < a.length; i++) {
+      if (a[i].outerHTML !== b[i].outerHTML) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  var m = met(editor, preview, editorWrapper, previewWrapper);
+  var cm = m.getEditor();
+
+  cm.setValue("This should be helo");
+
+  $('.marked-block', $(preview)).removeClass('block-highlight').removeClass('block-current');
+  var shouldBe = marked(cm.getValue());
+  var indeedBe = $(preview).html();
+  var pass = htmlEqual(shouldBe, indeedBe);
+
+  console.log(shouldBe);
+  console.log(indeedBe);
+  console.log(pass);
+
+});
