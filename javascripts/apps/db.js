@@ -1,83 +1,58 @@
 (function(){
 
-  var DB = function() {
-    this.db;
+  var DB = function() { };
+
+  DB.prototype.init = function(onSuccess) {
+    var self = this;
     var dbRequest = indexedDB.open("MeT", 1);
 
-    dbRequest.onerror = function(evt) {
-      console.log(evt);
-    };
-
     dbRequest.onsuccess = function(evt) {
-      console.log(evt);
-      db = evt.target.result;
+      self.db = evt.target.result;
+      onSuccess(self);
     };
 
     dbRequest.onupgradeneeded = function(evt) {
-      console.log(evt);
       var db = evt.target.result;
-      var store = db.createObjectStore("posts", { keyPath: "created_at" });
-      store.createIndex("title", "title", { unique: true });
+      var store = db.createObjectStore("posts", { keyPath: "created_at", autoincrement: false });
+      store.createIndex("title", "title", { unique: false });
       store.createIndex("updated_at", "updated_at", { unique: false });
-      console.log(store);
     };
   };
 
-  DB.prototype.getPosts = function(data) {
+  DB.prototype.getPosts = function(onSuccess) {
     var posts = [];
     var store = this.db.transaction(["posts"]).objectStore("posts");
 
     store.openCursor().onsuccess = function(evt) {
       var cursor = evt.target.result;
       if (cursor) {
-        console.log(cursor.value);
         posts.push(cursor.value);
         cursor.continue();
       } else {
-        console.log("No more entries!");
+        onSuccess(posts);
       }
     };
   };
 
-  DB.prototype.putPost = function(data) {
-    var transaction = this.db.transaction(["posts"], "readWrite");
-    transaction.oncomplete = function(evt) {
-      console.log(evt);
-    };
-    transaction.onerror = function(evt) {
-      console.log(evt);
-    };
+  DB.prototype.putPost = function(data, onSuccess) {
+    var transaction = this.db.transaction(["posts"], "readwrite");
     var store = transaction.objectStore("posts");
-    var request = store.add({
-      created_at: data.created_at || Date.now(),
-      updated_at: Date.now(),
-      title: data.title,
-      content: data.content
-    });
-    request.onsuccess = function(evt) {
-      console.log(evt);
+    var timestamp = parseInt((performance.timing.navigationStart + performance.now()) * 1000);
+    data.created_at = data.created_at || timestamp;
+    data.updated_at = timestamp;
+    store.put(data).onsuccess = function(evt) {
+      onSuccess(evt.target.result);
     };
   };
 
-  DB.prototype.getPost = function(data) {
-    var transaction = this.db.transaction(["posts"]);
-    var store = transaction.objectStore("posts");
-    var request = store.get(data.created_at);
-    request.onerror = function(evt) {
-      console.log(evt);
-    };
-    request.onsuccess = function(evt) {
-      console.log(evt);
-    };
+  DB.prototype.getPost = function(data, onSuccess, onError) {
+    this.db.transaction("posts").objectStore("posts").get(data.created_at).onsuccess = function(evt) {
+      onSuccess(evt.target.result);
+    }
   };
 
   DB.prototype.deletePost = function(data) {
-    var transaction = this.db.transaction(["posts"], "readWrite");
-    var store = transaction.objectStore("posts");
-    var request = store.delete(data.created_at);
-    request.onsuccess = function(evt) {
-      console.log(evt);
-    };
+    this.db.transaction("posts", "readwrite").objectStore("posts").delete(data.created_at);
   };
 
   define([], function() {

@@ -1,4 +1,4 @@
-(function() { define(['zepto', 'marked', 'db'], function($, marked, db) {
+(function() { define(['zepto', 'marked', 'db'], function($, marked, dbEngine) {
 
   var scrollTop = function() {
     var hTop = $('html').scrollTop();
@@ -210,7 +210,40 @@
     return this.editor;
   };
 
+  MeT.prototype.getLastPost = function() {
+    var self = this;
+    self.db.getPosts(function(posts) {
+      self.currentPost = posts.slice(-1)[0];
+      if (typeof self.currentPost !== 'undefined') {
+        self.editor.setValue(self.currentPost.content);
+      }
+    });
+  };
+
+  MeT.prototype.saveChanges = function() {
+    var self = this;
+    if (typeof self.currentPost === 'undefined' || self.editor.getValue() !== self.currentPost.content) {
+      var post = {content: self.editor.getValue()};
+      if (typeof self.currentPost !== 'undefined') {
+        post.created_at = self.currentPost.created_at;
+      }
+      self.db.putPost(post, function(key) {
+        post.created_at = key;
+        self.currentPost = post;
+      });
+    }
+  };
+
   MeT.prototype.met = function() {
+    var self = this;
+    dbEngine.init(function(db) {
+      self.db = db;
+      self._met();
+    });
+    return self;
+  };
+
+  MeT.prototype._met = function() {
     var self = this;
     var mbsa = self.mbsa;
     var preview = self.preview;
@@ -234,7 +267,9 @@
       }
     });
 
+    self.getLastPost();
     editor.on('change', function(cm, change) {
+      self.saveChanges();
       preview = $(self.previewArea);
       if (preview.length === 0) {
         return;
@@ -328,8 +363,6 @@
       } // for blocks
 
     }); // editor.on('change')
-
-    return self;
   };
 
   return function(input, preview, inputWrapper, previewWrapper) {
