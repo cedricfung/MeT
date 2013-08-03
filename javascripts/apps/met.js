@@ -1,5 +1,10 @@
 (function() { define(['zepto', 'marked', 'db'], function($, marked, db) {
 
+  var scrollTop = function() {
+    var hTop = $('html').scrollTop();
+    return hTop === 0 ? $('body').scrollTop() : hTop;
+  };
+
   var range = function(el) {
     return $.parseJSON(el.attr('data-range'));
   };
@@ -107,14 +112,14 @@
     var topPadding = parseInt($(self.previewWrapper).css('padding-top'));
 
     var syncTwo = function(sy1, sy2) {
-      var sTop = $('html').scrollTop();
+      var sTop = scrollTop();
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t, sTop);
       if (top >= 0) {
         $(sy1.sel).animate({top: top}, 300);
       } else {
         top = newTop(sy2.h, sy2.t, sy1.h, sy1.t, sTop);
-        sTop = $('html').scrollTop();
+        sTop = scrollTop();
         sTop = sTop + (top - sy2.t);
         $(sy2.sel).animate({top: top}, 300, function() {
           $('body').animate({scrollTop: sTop}, 0); // This doesn't work with Zepto
@@ -175,15 +180,15 @@
 
     $(document).on('scroll', function(evt) {
       evt.preventDefault();
-      var sTop = $('html').scrollTop();
+      var sTop = scrollTop();
       var posV = $(self.previewWrapper).position().top;
       var posE = $(self.inputWrapper).position().top;
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       if (posV >= sTop) {
-        $(self.previewWrapper).animate({top: sTop}, topPadding);
+        $(self.previewWrapper).animate({top: sTop}, 'fast');
       }
       if (posE >= sTop) {
-        $(self.inputWrapper).animate({top: sTop}, topPadding);
+        $(self.inputWrapper).animate({top: sTop}, 'fast');
       }
     });
 
