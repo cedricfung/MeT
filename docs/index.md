@@ -8,7 +8,7 @@ I'm trying to build a cross-platform markdown editor, with inline \(LaTeX\) supp
 
 This project is under heavy development and not yet be an alpha project, you shouldn't rely it to store your important documents.
 
-Though it's intended to be reliable at anytime, the content is stored locally with the experimental HTML5 feature `IndexedDB`, I haven't do enough tests to see if all browsers would crash the database in certain situations.
+Though it's supposed to be reliable at anytime, the content is stored locally with the experimental HTML5 feature `IndexedDB`, I haven't do enough tests to see if all browsers would crash the database in certain situations.
 
 
 ## Features
@@ -44,3 +44,4 @@ MeT is under active development.
 6. Online document share.
 7. Sync to other blogging or publish platforms.
 8. Performance improvement.
+9. Editing history, version system.

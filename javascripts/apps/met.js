@@ -217,9 +217,11 @@
       self.currentPost = posts.slice(-1)[0];
       if (typeof self.currentPost !== 'undefined') {
         self.editor.setValue(self.currentPost.content);
+        self.editor.clearHistory();
       } else {
         $.get(root + '/docs/index.md', function(md){
           self.editor.setValue(md);
+          self.editor.clearHistory();
         });
       }
     });
