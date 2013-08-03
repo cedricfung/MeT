@@ -1,4 +1,4 @@
-(function() { define(['zepto', 'marked'], function($, marked) {
+(function() { define(['zepto', 'marked', 'db'], function($, marked, db) {
 
   var range = function(el) {
     return $.parseJSON(el.attr('data-range'));
@@ -151,7 +151,7 @@
     });
 
     self.preview.on('click', 'a', function(evt) {
-      evt.stopPropagation();
+      evt.stopPropagation(); // Zepto doesn't work
     });
 
     self.preview.on('click', self.mbsa, function(evt) {
@@ -249,7 +249,7 @@
       if (base > 0) {
         baseBlock = $('<div data-range="[' + [0,base-1] + ']" class="marked-block"></div>');
         baseBlock.hide().insertBefore($(blocks[0]));
-        Array.unshift(blocks, baseBlock);
+        blocks = $(mbsa);
       }
 
       do {

@@ -4,6 +4,7 @@ require.config({
     zepto: 'libs/zepto',
     marked: 'libs/marked',
     cmgfm: 'libs/codemirror/mode/gfm/gfm',
+    db: 'apps/db',
     met: 'apps/met'
   },
   shim: {
@@ -39,12 +40,12 @@ require.config({
       ]
     },
     met: {
-      deps: ['zepto', 'cmgfm', 'marked']
+      deps: ['db', 'zepto', 'cmgfm', 'marked']
     }
   }
 });
 
-require(['zepto', 'met'], function(zepto, met) {
+require(['zepto', 'met'], function($, met) {
 
   var editor = '#editor textarea';
   var preview = '#preview .post';

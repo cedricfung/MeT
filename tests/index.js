@@ -4,6 +4,7 @@ require.config({
     zepto: 'libs/zepto',
     marked: 'libs/marked',
     cmgfm: 'libs/codemirror/mode/gfm/gfm',
+    db: 'apps/db',
     met: 'apps/met'
   },
   shim: {
@@ -39,7 +40,7 @@ require.config({
       ]
     },
     met: {
-      deps: ['zepto', 'cmgfm', 'marked']
+      deps: ['db', 'zepto', 'cmgfm', 'marked']
     }
   }
 });
@@ -114,7 +115,7 @@ require(['met', 'zepto', 'marked'], function(met, $, marked) {
   var m = met(editor, preview, editorWrapper, previewWrapper);
   var cm = m.getEditor();
 
-  var cases = {'failed': new Array(), 'passed': new Array()};
+  var cases = {'failed': [], 'passed': []};
 
   var htmlEqual = function(a, b) {
     var div = $('<div/>');
@@ -185,7 +186,7 @@ require(['met', 'zepto', 'marked'], function(met, $, marked) {
     return pass;
   };
 
-  var testDoc = function testDoc(name) {
+  var testDoc = function(name) {
     console.log("TEST BEING: " + name);
     var root = window.location.protocol + "//" + window.location.host;
     var mdURL = root + "/tests/fixtures/" + name + ".text";
@@ -195,24 +196,26 @@ require(['met', 'zepto', 'marked'], function(met, $, marked) {
       $.get(htmlURL, function(html) {
         markedTest(md, html);
         if(metTest(md)) {
-          Array.push(cases.passed, name);
+          cases.passed.push(name);
         } else {
           console.error("FAILED: " + name);
-          Array.push(cases.failed, name);
+          cases.failed.push(name);
         }
         console.log("TEST END:   " + name);
-        var doc = Array.pop(docs);
+        var doc = docs.pop();
         if (typeof doc !== 'undefined') {
           setTimeout(function() {testDoc(doc);}, 1000);
         } else {
           console.log("TEST FINISH!");
+          console.log("FAILED:");
+          console.log(cases.failed.join("\n"));
         }
       });
     });
 
   };
 
-  var doc = Array.pop(docs);
+  var doc = docs.pop();
   if (typeof doc !== 'undefined') {
     testDoc(doc);
   }
