@@ -1,5 +1,7 @@
 (function() { define(['zepto', 'marked', 'db'], function($, marked, dbEngine) {
 
+  var root = window.location.protocol + "//" + window.location.host;
+
   var scrollTop = function() {
     var hTop = $('html').scrollTop();
     return hTop === 0 ? $('body').scrollTop() : hTop;
@@ -50,7 +52,6 @@
   }());
 
   var setupWorker = function(met) {
-    var root = window.location.protocol + "//" + window.location.host;
     var worker = new Worker(root +"/javascripts/apps/worker.js");
     worker.addEventListener('message', function(e) {
       switch (e.data.type) {
@@ -216,6 +217,10 @@
       self.currentPost = posts.slice(-1)[0];
       if (typeof self.currentPost !== 'undefined') {
         self.editor.setValue(self.currentPost.content);
+      } else {
+        $.get(root + '/docs/index.md', function(md){
+          self.editor.setValue(md);
+        });
       }
     });
   };

@@ -97,11 +97,7 @@ require(['met', 'zepto', 'marked'], function(met, $, marked) {
     'original/markdown_documentation_syntax',
     'original/code_spans',
     'original/links_inline_style',
-    'original/nested_blockquotes',
-
-    'docs/index',
-    'docs/help',
-    'docs/todo'
+    'original/nested_blockquotes'
   ];
 
   var editor = '#editor textarea';
