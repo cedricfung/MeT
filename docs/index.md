@@ -22,6 +22,8 @@ Below is a partial list of the features that distinguish MeT from other similar 
 3. Available from all popular operating systems, each stroke will be stored in database offline.
 4. The simple interface, I love this, thought you may like it.
 
+![snapshot](images/snapshot.png)
+
 
 ## Thanks to
 
