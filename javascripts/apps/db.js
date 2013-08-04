@@ -51,8 +51,10 @@
     }
   };
 
-  DB.prototype.deletePost = function(data) {
-    this.db.transaction("posts", "readwrite").objectStore("posts").delete(data.created_at);
+  DB.prototype.deletePost = function(data, onSuccess) {
+    this.db.transaction("posts", "readwrite").objectStore("posts").delete(data.created_at).onsuccess = function(evt) {
+      onSuccess();
+    };
   };
 
   define([], function() {

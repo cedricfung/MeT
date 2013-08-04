@@ -15,7 +15,8 @@
       $.each(posts, function(i, p){
         var item = $('<li class="list-item"></li>');
         item.data('key', p.created_at);
-        item.html(p.title);
+        item.html('<a class="item-title">' + p.title + '</a>');
+        item.append('<a class="item-close">x</a>');
         if (p.created_at === self.cm.currentPost.created_at) {
           item.addClass('current');
         }
@@ -40,6 +41,35 @@
 
     $(document).click(function() {
       $(self.sel).animate({'margin-left': '-100%'}, 300);
+    });
+
+    $(self.sel + ' .close').click(function(evt) {
+      evt.preventDefault();
+      $(self.sel).animate({'margin-left': '-100%'}, 300);
+    });
+
+    $(self.sel + ' .add').click(function(evt) {
+      evt.preventDefault();
+      self.cm.newPost();
+    });
+
+    $(self.sel).on('click', '.list-item .item-title', function(evt) {
+      evt.preventDefault();
+      self.cm.loadPost($(this).parent('.list-item').data('key'));
+    });
+
+    $(self.sel).on('click', '.list-item .item-close', function(evt) {
+      evt.preventDefault();
+      self.cm.deletePost($(this).parent('.list-item').data('key'));
+    });
+
+    $(self.sel).on('mouseenter', '.list-item', function(evt) {
+      evt.preventDefault();
+      $('.item-close', $(this)).animate({opacity: '0.5'}, 300);
+    });
+    $(self.sel).on('mouseleave', '.list-item', function(evt) {
+      evt.preventDefault();
+      $('.item-close', $(this)).animate({opacity: '0'}, 300);
     });
   };
 

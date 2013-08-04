@@ -2,6 +2,26 @@
 
   var root = window.location.protocol + "//" + window.location.host;
 
+  Date.prototype.format = function(format) {
+    var o = {
+      "M+" : this.getMonth()+1, //month
+      "d+" : this.getDate(),    //day
+      "h+" : this.getHours(),   //hour
+      "m+" : this.getMinutes(), //minute
+      "s+" : this.getSeconds(), //second
+      "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+      "S" : this.getMilliseconds() //millisecond
+    }
+
+    if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+      (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)if(new RegExp("("+ k +")").test(format))
+      format = format.replace(RegExp.$1,
+        RegExp.$1.length==1 ? o[k] :
+          ("00"+ o[k]).substr((""+ o[k]).length));
+    return format;
+  };
+
   var scrollTop = function() {
     var hTop = $('html').scrollTop();
     return hTop === 0 ? $('body').scrollTop() : hTop;
@@ -21,7 +41,11 @@
     if (cap = lheading.exec(md)) {
       return cap[1];
     }
-    return md.substr(0, 64);
+    var title = md.substr(0, 64);
+    if ($.trim(title) === '') {
+      return new Date().format("yyyy-MM-dd h:mm:ss");
+    }
+    return title;
   };
 
   var getCMMode = (function () {
@@ -178,7 +202,7 @@
       evt.preventDefault();
       var r = range($(this));
       if (lastTrackedRange[0] === r[0] && lastTrackedRange[1] === r[1]) {
-        return false;
+        return;
       }
       clearMarker();
       $(this).addClass('block-current');
@@ -225,20 +249,44 @@
     return this.editor;
   };
 
-  MeT.prototype.getLastPost = function() {
-    var self = this;
+  MeT.prototype.loadLastPost = function(self) {
+    self.currentPost = {};
     self.db.getPosts(function(posts) {
-      self.currentPost = posts.slice(-1)[0];
-      if (typeof self.currentPost !== 'undefined') {
+      var post = posts.slice(-1)[0];
+      if (typeof post !== 'undefined') {
+        self.currentPost = post;
         self.editor.setValue(self.currentPost.content);
         self.editor.clearHistory();
       } else {
-        self.currentPost = {};
         $.get(root + '/docs/index.md', function(md){
           self.editor.setValue(md);
           self.editor.clearHistory();
         });
       }
+    });
+  };
+
+  MeT.prototype.newPost = function() {
+    this.currentPost = {};
+    this.editor.setValue('');
+    this.editor.clearHistory();
+  };
+
+  MeT.prototype.loadPost = function(key) {
+    var self = this;
+    if (key !== self.currentPost.created_at) {
+      self.db.getPost({created_at: key}, function(p) {
+        self.currentPost = p;
+        self.editor.setValue(self.currentPost.content);
+        self.editor.clearHistory();
+      });
+    }
+  };
+
+  MeT.prototype.deletePost = function(key) {
+    var self = this;
+    self.db.deletePost({created_at: key}, function() {
+      self.loadLastPost(self);
     });
   };
 
@@ -289,7 +337,7 @@
       }
     });
 
-    self.getLastPost();
+    self.loadLastPost(self);
     editor.on('change', function(cm, change) {
       self.saveChanges();
       preview = $(self.previewArea);

@@ -36,14 +36,14 @@ MeT is built upon latest web technologies, from many open source projects.
 
 MeT is under active development.
 
-1. File lists.
+1. ~~File lists~~.
 2. Better editing layout with configurations.
 3. More test coverage, there are still known bugs.
 4. Sync with server, with encryption.
 5. Spell checking, and auto-completion.
 6. Online document share.
-7. Sync to other blogging or publish platforms.
+7. Sync to other blogging or publishing platforms.
 8. Performance improvement.
 9. Editing history, version system.
 10. Implement simple content observer mechanism.
-11. Use CodeMirror lineWidget and CodeMirror drag drop events to upload image.
+11. Image uploading with DnD.

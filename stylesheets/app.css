@@ -43,7 +43,7 @@
 #editor textarea,
 .CodeMirror-scroll {
   font-size: 12px;
-  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "WenQuanYi Micro Hei Mono", monospace;
   color: #555555;
   line-height: 1.5em;
   min-height: 256px;
@@ -129,7 +129,7 @@ code {
 
 code,
 .marked-code {
-  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "WenQuanYi Micro Hei Mono", monospace;
   font-size: 12px;
   background-color: #F9F9F9;
   padding: 0 2px;
@@ -201,6 +201,7 @@ code,
  ****** file list section  ****
  *****************************/
 #list {
+  font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "WenQuanYi Micro Hei Mono", monospace;
   background: rgba(0, 0, 0, 0.94) fixed no-repeat;
   color: #FFFFFF;
   z-index: 999;
@@ -212,5 +213,70 @@ code,
   margin-left: -100%;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 16px;
+}
+
+#list .menu {
+  padding: 8px 16px;
+  border-bottom: 1px solid #222222;
+  background-color: #222222;
+}
+
+#list .menu .add,
+#list .menu .close
+{
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 0 1px 0 #FFFFFF;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+#list .menu .add {
+  font-size: 22px;
+}
+
+#list .menu .add:hover,
+#list .menu .add:focus,
+#list .menu .close:hover,
+#list .menu .close:focus {
+  text-decoration: none;
+  color: #FFFFFF;
+  opacity: 0.9;
+}
+
+#list ul {
+  padding: 0;
+  margin: 0;
+}
+
+#list .list-item {
+  list-style: none;
+  line-height: 1.4em;
+  padding: 8px 16px;
+  border-bottom: 1px solid #222222;
+}
+
+#list .current,
+#list .list-item:hover {
+  background-color: #222222;
+}
+
+#list .current {
+  font-weight: bold;
+  font-size: 96%;
+}
+
+#list .list-item a {
+  cursor: pointer;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+#list .list-item .item-close {
+  margin-left: 16px;
+  font-weight: bold;
+  text-shadow: 0 1px 0 #FFFFFF;
+  opacity: 0;
 }
