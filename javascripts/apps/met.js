@@ -1,4 +1,4 @@
-(function() { define(['zepto', 'marked', 'db'], function($, marked, dbEngine) {
+(function() { define(['zepto', 'marked', 'db', 'list'], function($, marked, dbEngine, list) {
 
   var root = window.location.protocol + "//" + window.location.host;
 
@@ -9,6 +9,19 @@
 
   var range = function(el) {
     return $.parseJSON(el.attr('data-range'));
+  };
+
+  var heading = /^\s*(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/;
+  var lheading = /^([^\n]+)\n *(=|-){3,} *\n*/;
+  var getTitle = function(md) {
+    var cap;
+    if (cap = heading.exec(md)) {
+      return cap[2];
+    }
+    if (cap = lheading.exec(md)) {
+      return cap[1];
+    }
+    return md.substr(0, 64);
   };
 
   var getCMMode = (function () {
@@ -72,12 +85,13 @@
     worker.postMessage({cmd: 'parse', text: met.editor.getValue()});
   };
 
-  var MeT = function(inputArea, previewArea, inputWrapper, previewWrapper) {
+  var MeT = function(inputArea, previewArea, inputWrapper, previewWrapper, listArea) {
     var self = this;
     this.inputArea = inputArea;
     this.previewArea = previewArea;
     this.inputWrapper = inputWrapper;
     this.previewWrapper = previewWrapper;
+    this.listArea = listArea;
     this.mbsa = previewArea + ' > .marked-block';
     this.area = $(inputArea)[0];
     this.preview = $(previewArea);
@@ -219,6 +233,7 @@
         self.editor.setValue(self.currentPost.content);
         self.editor.clearHistory();
       } else {
+        self.currentPost = {};
         $.get(root + '/docs/index.md', function(md){
           self.editor.setValue(md);
           self.editor.clearHistory();
@@ -229,14 +244,13 @@
 
   MeT.prototype.saveChanges = function() {
     var self = this;
-    if (typeof self.currentPost === 'undefined' || self.editor.getValue() !== self.currentPost.content) {
-      var post = {content: self.editor.getValue()};
-      if (typeof self.currentPost !== 'undefined') {
-        post.created_at = self.currentPost.created_at;
-      }
-      self.db.putPost(post, function(key) {
-        post.created_at = key;
-        self.currentPost = post;
+    if (self.editor.getValue() !== self.currentPost.content) {
+      $.extend(self.currentPost, {
+        title:  getTitle(self.editor.getValue()),
+        content: self.editor.getValue()
+      });
+      self.db.putPost(self.currentPost, function(key) {
+        self.currentPost.created_at = key;
       });
     }
   };
@@ -246,6 +260,7 @@
     dbEngine.init(function(db) {
       self.db = db;
       self._met();
+      list(self.listArea, self);
     });
     return self;
   };
@@ -372,8 +387,8 @@
     }); // editor.on('change')
   };
 
-  return function(input, preview, inputWrapper, previewWrapper) {
-    return new MeT(input, preview, inputWrapper, previewWrapper).met();
+  return function(input, preview, inputWrapper, previewWrapper, listArea) {
+    return new MeT(input, preview, inputWrapper, previewWrapper, listArea).met();
   };
 
 }); }());

@@ -45,3 +45,5 @@ MeT is under active development.
 7. Sync to other blogging or publish platforms.
 8. Performance improvement.
 9. Editing history, version system.
+10. Implement simple content observer mechanism.
+11. Use CodeMirror lineWidget and CodeMirror drag drop events to upload image.

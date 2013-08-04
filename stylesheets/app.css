@@ -8,6 +8,10 @@
   width: 100%;
 }
 
+
+/******************************
+ * editor and preview section *
+ *****************************/
 #editor,
 #preview
 {
@@ -190,4 +194,23 @@ code,
 .content h1:first-child,
 .content h2:first-child {
   margin-top: 2px;
+}
+
+
+/******************************
+ ****** file list section  ****
+ *****************************/
+#list {
+  background: rgba(0, 0, 0, 0.94) fixed no-repeat;
+  color: #FFFFFF;
+  z-index: 999;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 336px;
+  max-width: 100%;
+  margin-left: -100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 16px;
 }
