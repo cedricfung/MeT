@@ -252,18 +252,19 @@ code,
 }
 
 #list .list-item {
+  cursor: pointer;
   list-style: none;
   line-height: 1.4em;
   padding: 8px 16px;
   border-bottom: 1px solid #222222;
 }
 
-#list .current,
 #list .list-item:hover {
-  background-color: #222222;
+  background-color: #303030;
 }
 
 #list .current {
+  background-color: #222222;
   font-weight: bold;
   font-size: 96%;
 }
@@ -275,8 +276,18 @@ code,
 }
 
 #list .list-item .item-close {
-  margin-left: 16px;
+  float: right;
   font-weight: bold;
-  text-shadow: 0 1px 0 #FFFFFF;
-  opacity: 0;
+  color: #777777;
+  text-shadow: 0 1px 0 #888888;
+  display: none;
+}
+
+#list .list-item:hover .item-close {
+  display: inline-block;
+}
+
+#list .list-item .item-close:hover {
+  color: #FF0000;
+  text-shadow: 0 1px 0 #FF0000;
 }

@@ -47,3 +47,4 @@ MeT is under active development.
 9. Editing history, version system.
 10. Implement simple content observer mechanism.
 11. Image uploading with DnD.
+12. Status line to show words, lines etc.

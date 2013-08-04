@@ -6,3 +6,9 @@
 
 User-Agent: *
 Disallow: /docs/
+
+User-Agent: *
+Disallow: /javascripts/
+
+User-Agent: *
+Disallow: /stylesheets/

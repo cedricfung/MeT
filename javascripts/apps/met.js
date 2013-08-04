@@ -266,27 +266,30 @@
     });
   };
 
-  MeT.prototype.newPost = function() {
+  MeT.prototype.newPost = function(callback) {
     this.currentPost = {};
     this.editor.setValue('');
     this.editor.clearHistory();
+    callback();
   };
 
-  MeT.prototype.loadPost = function(key) {
+  MeT.prototype.loadPost = function(key, callback) {
     var self = this;
     if (key !== self.currentPost.created_at) {
       self.db.getPost({created_at: key}, function(p) {
         self.currentPost = p;
         self.editor.setValue(self.currentPost.content);
         self.editor.clearHistory();
+        callback();
       });
     }
   };
 
-  MeT.prototype.deletePost = function(key) {
+  MeT.prototype.deletePost = function(key, callback) {
     var self = this;
     self.db.deletePost({created_at: key}, function() {
       self.loadLastPost(self);
+      callback();
     });
   };
 
