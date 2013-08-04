@@ -1,4 +1,4 @@
-(function() { define(['zepto', 'marked', 'db', 'list'], function($, marked, dbEngine, list) {
+(function() { define(['zepto', 'marked', 'db', 'list', 'status'], function($, marked, dbEngine, list, status) {
 
   var root = window.location.protocol + "//" + window.location.host;
 
@@ -109,13 +109,14 @@
     worker.postMessage({cmd: 'parse', text: met.editor.getValue()});
   };
 
-  var MeT = function(inputArea, previewArea, inputWrapper, previewWrapper, listArea) {
+  var MeT = function(inputArea, previewArea, inputWrapper, previewWrapper, listArea, statusArea) {
     var self = this;
     this.inputArea = inputArea;
     this.previewArea = previewArea;
     this.inputWrapper = inputWrapper;
     this.previewWrapper = previewWrapper;
     this.listArea = listArea;
+    this.statusArea = statusArea;
     this.mbsa = previewArea + ' > .marked-block';
     this.area = $(inputArea)[0];
     this.preview = $(previewArea);
@@ -312,6 +313,7 @@
       self.db = db;
       self._met();
       list(self.listArea, self);
+      status(self.statusArea, self);
     });
     return self;
   };
@@ -438,8 +440,8 @@
     }); // editor.on('change')
   };
 
-  return function(input, preview, inputWrapper, previewWrapper, listArea) {
-    return new MeT(input, preview, inputWrapper, previewWrapper, listArea).met();
+  return function(input, preview, inputWrapper, previewWrapper, listArea, statusArea) {
+    return new MeT(input, preview, inputWrapper, previewWrapper, listArea, statusArea).met();
   };
 
 }); }());

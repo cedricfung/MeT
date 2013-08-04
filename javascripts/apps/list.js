@@ -1,10 +1,10 @@
 (function() { define(['zepto'], function($) {
 
-  var FileList = function(sel, cm) {
+  var FileList = function(sel, met) {
     this.sel = sel;
     this.usel = sel + ' > ul';
-    this.cm = cm;
-    this.db = cm.db;
+    this.met = met;
+    this.db = met.db;
     this.setupView();
     this.populate(this);
   };
@@ -17,7 +17,7 @@
         item.data('key', p.created_at);
         item.html('<a class="item-title">' + p.title + '</a>');
         item.append('<a class="item-close" title="Delete this post">x</a>');
-        if (p.created_at === self.cm.currentPost.created_at) {
+        if (p.created_at === self.met.currentPost.created_at) {
           item.addClass('current');
         }
         ul.append(item);
@@ -27,21 +27,17 @@
   };
 
   FileList.prototype.show = function(self) {
-    $(self.sel).animate({'margin-left': '0px'}, 300);
+    $(self.sel).animate({'margin-left': '0px'}, 64);
     self.refresh(self);
   };
 
   FileList.prototype.hide = function(self) {
-    $(self.sel).animate({'margin-left': '-100%'}, 300);
-    if (typeof self.timer !== 'undefined') {
-      clearTimeout(self.timer);
-    }
+    $(self.sel).animate({'margin-left': '-' + $(self.sel).width() + 'px'}, 64);
+    clearTimeout(self.timer);
   };
 
   FileList.prototype.refresh = function(self) {
-    if (typeof self.timer !== 'undefined') {
-      clearTimeout(self.timer);
-    }
+    clearTimeout(self.timer);
     self.populate(self);
     self.timer = setInterval(function(){self.populate(self)}, 6400);
   };
@@ -69,28 +65,28 @@
 
     $(self.sel + ' .add').click(function(evt) {
       evt.preventDefault();
-      self.cm.newPost(function(){
+      self.met.newPost(function(){
         self.refresh(self);
       });
     });
 
     $(self.sel).on('click', '.list-item', function(evt) {
       evt.preventDefault();
-      self.cm.loadPost($(this).data('key'), function(){
+      self.met.loadPost($(this).data('key'), function(){
         self.refresh(self);
       });
     });
 
     $(self.sel).on('click', '.list-item .item-close', function(evt) {
       evt.preventDefault();
-      self.cm.deletePost($(this).parent('.list-item').data('key'), function(){
+      self.met.deletePost($(this).parent('.list-item').data('key'), function(){
         self.refresh(self);
       });
     });
   };
 
-  return function(sel, cm) {
-    return new FileList(sel, cm);
+  return function(sel, met) {
+    return new FileList(sel, met);
   };
 
 }); }());

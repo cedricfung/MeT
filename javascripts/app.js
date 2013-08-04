@@ -5,6 +5,7 @@ require.config({
     marked: 'libs/marked',
     cmgfm: 'libs/codemirror/mode/gfm/gfm',
     db: 'apps/db',
+    status: 'apps/status',
     list: 'apps/list',
     met: 'apps/met'
   },
@@ -40,14 +41,16 @@ require.config({
         "libs/codemirror/mode/htmlmixed/htmlmixed"
       ]
     },
+    status: ['zepto'],
     list: ['db', 'zepto'],
-    met: ['list', 'db', 'zepto', 'cmgfm', 'marked']
+    met: ['status', 'list', 'db', 'zepto', 'cmgfm', 'marked']
   }
 });
 
 require(['zepto', 'met'], function($, met) {
 
   var list = '#list';
+  var status = '#status';
   var editor = '#editor textarea';
   var preview = '#preview .post';
   var editorWrapper = '#editor';
@@ -60,7 +63,7 @@ require(['zepto', 'met'], function($, met) {
     $(list).css('height', $(window).height() + 'px');
   };
 
-  met(editor, preview, editorWrapper, previewWrapper, list);
+  met(editor, preview, editorWrapper, previewWrapper, list, status);
 
   $(setupHeight());
   $(window).on('load resize', function() {
