@@ -38,6 +38,8 @@
         console.log(file);
         if (self.check(file)) {
           self.upload(self, file);
+        } else {
+          self.ulw.lineWidget.clear();
         }
       }
       e.preventDefault();
@@ -45,7 +47,7 @@
   };
 
   Uploader.prototype.setupDnDArea = function(self, cm, e) {
-    var line = e.target.lineObj;// || e.originalTarget.lineObj;
+    var line = e.target.lineObj;
     if (typeof line !== 'undefined') {
       var dnd = $('<progress id="dnd-line-widget" class="dnd-progress progress" max="100" value="0"></progress>');
       var sel = '#dnd-line-widget';

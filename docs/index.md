@@ -20,7 +20,8 @@ Below is a partial list of the features that distinguish MeT from other similar 
 1. Blazingly fast live preview, with increment parsing.
 2. Easily sync the preview and editor whenever you scroll or click each part.
 3. Available from all popular operating systems, each stroke will be stored in database offline.
-4. The simple interface, I love this, thought you may like it.
+4. Instant image uploading just in the editor, through **drag and drop**.
+5. The simple interface, I love this, thought you may like it.
 
 ![snapshot](images/snapshot.png)
 
@@ -38,15 +39,17 @@ MeT is built upon latest web technologies, from many open source projects.
 
 MeT is under active development.
 
-1. ~~File lists~~.
-2. Better editing layout with configurations.
-3. More test coverage, there are still known bugs.
-4. Sync with server, with encryption.
-5. Spell checking, and auto-completion.
-6. Online document share.
-7. Sync to other blogging or publishing platforms.
-8. Performance improvement.
-9. Editing history, version system.
-10. Implement simple content observer mechanism.
-11. Image uploading with DnD.
-12. ~~Status line to show words, lines etc~~.
+1. More test coverage, there are still known bugs.
+2. Performance improvement.
+3. ~~File lists~~.
+4. ~~Implement simple content observer mechanism~~.
+5. ~~Image uploading with DnD~~.
+6. ~~Status line to show words, lines etc~~.
+7. Spell checking, and auto-completion.
+8. Editing history, version system.
+9. Better editing layout with configurations.
+10. Sync with server, with encryption.
+11. Online document share.
+12. Sync to other blogging or publishing platforms.
+13. Improve uploading stability and usability.
+14. Store uploaded file lists.
