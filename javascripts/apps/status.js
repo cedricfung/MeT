@@ -46,8 +46,8 @@
     });
   };
 
-  return function(sel, cm) {
-    return new Status(sel, cm);
+  return function(sel, met) {
+    return new Status(sel, met);
   };
 
 }); }());

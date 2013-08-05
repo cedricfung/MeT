@@ -1,4 +1,4 @@
-(function() { define(['zepto', 'marked', 'db', 'list', 'status'], function($, marked, dbEngine, list, status) {
+(function() { define(['zepto', 'marked', 'db', 'list', 'status', 'uploader'], function($, marked, dbEngine, list, status, uploader) {
 
   var root = window.location.protocol + "//" + window.location.host;
 
@@ -129,6 +129,7 @@
       lineWrapping: true,
       matchBrackets: true,
       showTrailingSpace: true,
+      dragDrop: false,
       extraKeys: {
         Tab: function(cm) {
           if (cm.getSelection().length === 0) {
@@ -314,6 +315,7 @@
       self._met();
       list(self.listArea, self);
       status(self.statusArea, self);
+      uploader(self.inputWrapper, self);
     });
     return self;
   };

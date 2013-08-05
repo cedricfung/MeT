@@ -5,6 +5,7 @@ require.config({
     marked: 'libs/marked',
     cmgfm: 'libs/codemirror/mode/gfm/gfm',
     db: 'apps/db',
+    uploader: 'apps/uploader',
     status: 'apps/status',
     list: 'apps/list',
     met: 'apps/met'
@@ -41,9 +42,10 @@ require.config({
         "libs/codemirror/mode/htmlmixed/htmlmixed"
       ]
     },
+    uploader: ['zepto'],
     status: ['zepto'],
     list: ['db', 'zepto'],
-    met: ['status', 'list', 'db', 'zepto', 'cmgfm', 'marked']
+    met: ['uploader', 'status', 'list', 'db', 'zepto', 'cmgfm', 'marked']
   }
 });
 
