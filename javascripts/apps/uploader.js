@@ -8,22 +8,25 @@
     this.wrapper = '.CodeMirror pre';
     this.met = met;
     this.init(this);
+    this.ulw = {};
   };
 
   Uploader.prototype.init = function(self) {
     var cm = self.met.editor;
+
     $('.CodeMirror-code').on('dragover', 'pre', function(e){
       self.setupDnDArea(self, cm, e);
       e.preventDefault();
     });
+
     $('.CodeMirror-code').on('dragenter', 'pre', function(e){
       self.setupDnDArea(self, cm, e);
       e.preventDefault();
     });
 
     $('.CodeMirror-code').on('dragleave', 'pre', function(e){
-      if (typeof self.lineWidget !== 'undefined') {
-        self.lineWidget.clear();
+      if (typeof self.ulw.lineWidget !== 'undefined') {
+        self.ulw.lineWidget.clear();
       }
       e.preventDefault();
     });
@@ -34,7 +37,7 @@
         var file = files[i];
         console.log(file);
         if (self.check(file)) {
-          self.upload(file);
+          self.upload(self, file);
         }
       }
       e.preventDefault();
@@ -44,15 +47,15 @@
   Uploader.prototype.setupDnDArea = function(self, cm, e) {
     var line = e.target.lineObj;// || e.originalTarget.lineObj;
     if (typeof line !== 'undefined') {
+      var dnd = $('<progress id="dnd-line-widget" class="dnd-progress progress" max="100" value="0"></progress>');
       var sel = '#dnd-line-widget';
       if ($(sel).length === 0) {
-        var dnd = $('<progress id="dnd-line-widget" class="dnd-progress progress" max="100" value="0"></progress>');
-        self.lineWidget = cm.addLineWidget(line, dnd[0]);
+        self.ulw.lineWidget = cm.addLineWidget(line, dnd[0]);
       } else {
-        self.lineWidget.clear();
-        var dnd = $('<progress id="dnd-line-widget" class="dnd-progress progress" max="100" value="0"></progress>');
-        self.lineWidget = cm.addLineWidget(line, dnd[0]);
+        self.ulw.lineWidget.clear();
+        self.ulw.lineWidget = cm.addLineWidget(line, dnd[0]);
       }
+      self.ulw.line = line;
     }
   };
 
@@ -60,7 +63,7 @@
     return (file.type.indexOf("image/") === 0);
   };
 
-  Uploader.prototype.upload = function(file) {
+  Uploader.prototype.upload = function(self, file) {
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     xhr.open('POST', IO_URL, true);
@@ -72,6 +75,19 @@
     xhr.setRequestHeader('Expect', '100-continue');
     xhr.onreadystatechange = function(evt) {
       console.log(evt);
+      if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+          self.ulw.lineWidget.clear();
+          var cm = self.met.editor;
+          var res = $.parseJSON(evt.target.responseText);
+          var l = cm.getLineNumber(self.ulw.line) + 1;
+          cm.replaceRange("![" + res.name + "](" + res.url + ")\n", {line:l, ch:0}, {line:l, ch:0});
+        } else {
+          console.log("XHR Error: " + xhr.status);
+        }
+      } else {
+        console.log("readyState: " + xhr.readyState);
+      }
     };
     xhr.upload.addEventListener("progress", function(e) {
       if ($('#dnd-line-widget').length !== 0) {
