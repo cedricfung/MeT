@@ -2,10 +2,11 @@
 
   var FileList = function(sel, met) {
     this.sel = sel;
+    this.osel = sel + '-outer';
     this.usel = sel + ' > ul';
     this.met = met;
     this.db = met.db;
-    this.setupView();
+    this.setupView(this);
     this.populate(this);
   };
 
@@ -27,12 +28,12 @@
   };
 
   FileList.prototype.show = function(self) {
-    $(self.sel).animate({'margin-left': '0px'}, 64);
+    $(self.osel).animate({'margin-left': '0px'}, 64);
     self.refresh(self);
   };
 
   FileList.prototype.hide = function(self) {
-    $(self.sel).animate({'margin-left': '-' + $(self.sel).width() + 'px'}, 64);
+    $(self.osel).animate({'margin-left': '-' + $(self.sel).width() + 'px'}, 64);
     clearTimeout(self.timer);
   };
 
@@ -42,10 +43,18 @@
     self.timer = setInterval(function(){self.populate(self)}, 6400);
   };
 
-  FileList.prototype.setupView = function() {
-    var self = this;
+  FileList.prototype.setupView = function(self) {
+    self._setupView(self);
+    $(window).resize(function(evt) {
+      self._setupView(self);
+    });
+  };
+
+  FileList.prototype._setupView = function(self) {
+    $(self.sel).width($(self.osel).width() + scrollbarWidth());
+
     $(document).mousemove(function(evt) {
-      if (evt.clientX <= 2 && $(self.sel).css('margin-left') !== '0px') {
+      if (evt.clientX <= 4 && $(self.osel).css('margin-left') !== '0px') {
         self.show(self);
       }
     });
@@ -83,6 +92,19 @@
         self.refresh(self);
       });
     });
+  };
+
+  var scrollbarWidth = function() {
+    var parent, child, width;
+
+    if(width===undefined) {
+      parent = $('<div style="width:50px;height:50px;overflow:auto"><div/></div>').appendTo('body');
+      child=parent.children();
+      width=child.width()-child.height(99).width();
+      parent.remove();
+    }
+
+    return width;
   };
 
   return function(sel, met) {

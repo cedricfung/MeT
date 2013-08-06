@@ -206,17 +206,22 @@ code,
  *****************************/
 #list {
   font-family: "Droid Sans Mono", "Ubuntu Mono", "Monaco", "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "WenQuanYi Micro Hei Mono", monospace;
-  background: rgba(0, 0, 0, 0.94) fixed no-repeat;
   color: #FFFFFF;
-  z-index: 999;
+  width: 336px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#list-outer {
   position: fixed;
   left: 0;
   top: 0;
-  width: 336px;
+  background: rgba(0, 0, 0, 0.94) fixed no-repeat;
+  z-index: 999;
+  width: 330px;
   max-width: 100%;
   margin-left: -336px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 #list .menu {

@@ -52,4 +52,5 @@ MeT is under active development.
 11. Online document share.
 12. Sync to other blogging or publishing platforms.
 13. Improve uploading stability and usability.
-14. Store uploaded file lists.
+14. Keep a list for files uploaded.
+15. Support multiple files uploading.
