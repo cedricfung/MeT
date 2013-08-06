@@ -156,16 +156,7 @@
       var sTop = scrollTop();
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t, sTop);
-      if (top >= 0) {
-        $(sy1.sel).animate({top: top}, 300);
-      } else {
-        top = newTop(sy2.h, sy2.t, sy1.h, sy1.t, sTop);
-        sTop = scrollTop();
-        sTop = sTop + (top - sy2.t);
-        $(sy2.sel).animate({top: top}, 300, function() {
-          $('body').animate({scrollTop: sTop}, 0); // This doesn't work with Zepto
-        });
-      }
+      $(sy1.sel).animate({top: top}, 300);
     };
 
     var lastTrackedRange = [0,0];
@@ -197,6 +188,7 @@
     });
 
     self.preview.on('click', 'a', function(evt) {
+      window.open($(this).attr('href'), '_blank');
       evt.stopPropagation(); // Zepto doesn't work
     });
 
@@ -225,10 +217,10 @@
       var posV = $(self.previewWrapper).position().top;
       var posE = $(self.inputWrapper).position().top;
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
-      if (posV >= sTop) {
+      if ((sTop == 0 && posV < 0) || posV >= sTop) {
         $(self.previewWrapper).animate({top: sTop}, 'fast');
       }
-      if (posE >= sTop) {
+      if ((sTop == 0 && posE < 0) || posE >= sTop) {
         $(self.inputWrapper).animate({top: sTop}, 'fast');
       }
     });
