@@ -15,4 +15,4 @@ find javascripts/apps ! -name worker.js -type f -delete
 mkdir log
 rsync -r -v . webapp@repo.io:apps/met.repo.io/current/
 
-find . -type f | grep -v MathJax
+find . -type f | grep -v MathJax | xargs ls -lh
