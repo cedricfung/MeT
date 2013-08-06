@@ -176,9 +176,9 @@
           }
           clearMarker();
           b.addClass('block-current');
-          var h1 = b.position().top + b.height() * 0.5;
+          var h1 = b.position().top;
           var t1 = $(self.previewWrapper).position().top;
-          var h2 = (self.editor.charCoords(self.editor.posFromIndex(r[0]), 'local').top + self.editor.charCoords(self.editor.posFromIndex(r[1]), 'local').bottom) * 0.5;
+          var h2 = self.editor.charCoords(self.editor.posFromIndex(r[0]), 'local').top;
           var t2 = $(self.inputWrapper).position().top;
           syncTwo({h: h1, t: t1, sel: self.previewWrapper}, {h: h2, t: t2, sel: self.inputWrapper});
           lastTrackedRange = r;
@@ -202,9 +202,9 @@
       $(this).addClass('block-current');
       var posTop = self.editor.posFromIndex(r[0]);
       var posBottom = self.editor.posFromIndex(r[1]);
-      var h1 = (self.editor.charCoords(posTop, 'local').top + self.editor.charCoords(posBottom, 'local').bottom) * 0.5;
+      var h1 = self.editor.charCoords(posTop, 'local').top;
       var t1 = $(self.inputWrapper).position().top;
-      var h2 = $(this).position().top + $(this).height() * 0.5;
+      var h2 = $(this).position().top;
       var t2 = $(self.previewWrapper).position().top;
       syncTwo({h: h1, t: t1, sel: self.inputWrapper}, {h: h2, t: t2, sel: self.previewWrapper});
       lastTrackedRange = r;
@@ -217,10 +217,10 @@
       var posV = $(self.previewWrapper).position().top;
       var posE = $(self.inputWrapper).position().top;
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
-      if ((sTop == 0 && posV < 0) || posV >= sTop) {
+      if ((sTop === 0 && posV < 0) || posV >= sTop) {
         $(self.previewWrapper).animate({top: sTop}, 'fast');
       }
-      if ((sTop == 0 && posE < 0) || posE >= sTop) {
+      if ((sTop === 0 && posE < 0) || posE >= sTop) {
         $(self.inputWrapper).animate({top: sTop}, 'fast');
       }
     });
