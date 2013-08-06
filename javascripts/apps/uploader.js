@@ -17,11 +17,13 @@
     $('.CodeMirror-code').on('dragover', 'pre', function(e){
       self.setupDnDArea(self, cm, e);
       e.preventDefault();
+      e.stopPropagation();
     });
 
     $('.CodeMirror-code').on('dragenter', 'pre', function(e){
       self.setupDnDArea(self, cm, e);
       e.preventDefault();
+      e.stopPropagation();
     });
 
     $('.CodeMirror-code').on('dragleave', 'pre', function(e){
@@ -29,6 +31,7 @@
         self.ulw.lineWidget.clear();
       }
       e.preventDefault();
+      e.stopPropagation();
     });
 
     $('.CodeMirror-code').on('drop', 'pre', function(e){
@@ -43,13 +46,14 @@
         }
       }
       e.preventDefault();
+      e.stopPropagation();
     });
   };
 
   Uploader.prototype.setupDnDArea = function(self, cm, e) {
     var line = e.target.lineObj;
     if (typeof line !== 'undefined') {
-      var dnd = $('<progress id="dnd-line-widget" class="dnd-progress progress" max="100" value="0"></progress>');
+      var dnd = $('<div id="dnd-line-widget" class="progress-max"><div class="progress-name"></div><div class="progress-value"></div></progress>');
       var sel = '#dnd-line-widget';
       if ($(sel).length === 0) {
         self.ulw.lineWidget = cm.addLineWidget(line, dnd[0]);
@@ -92,11 +96,9 @@
       }
     };
     xhr.upload.addEventListener("progress", function(e) {
-      if ($('#dnd-line-widget').length !== 0) {
-        $('#dnd-line-widget')[0].value = e.loaded;
-        $('#dnd-line-widget')[0].max = e.total;
-      }
+      $('.progress-value').animate({width: (100 * e.loaded / e.total) + '%'}, 100);
     }, false);
+    $('.progress-name').html(file.name);
     var reader = new FileReader();
     reader.onload = function(evt) {
       xhr.send(evt.target.result);
