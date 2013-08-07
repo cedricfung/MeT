@@ -52,6 +52,7 @@
 
   FileList.prototype._setupView = function(self) {
     $(self.sel).width($(self.osel).width() + scrollbarWidth());
+    $(self.sel).mousedown(function(evt){evt.preventDefault();});
 
     $(document).mousemove(function(evt) {
       if (evt.clientX <= 4 && $(self.osel).css('margin-left') !== '0px') {
