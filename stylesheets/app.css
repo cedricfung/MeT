@@ -348,6 +348,7 @@ code,
   margin: 0;
   padding: 0;
   position: relative;
+  overflow: hidden;
 }
 
 .progress-name {
@@ -362,6 +363,7 @@ code,
   left: 0;
   top: 0;
   z-index: 1;
+  overflow: hidden;
 }
 
 .progress-value {

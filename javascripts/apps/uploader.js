@@ -75,14 +75,13 @@
     xhr.open('POST', IO_URL, true);
     xhr.setRequestHeader('X-API-KEY', IO_KEY);
     xhr.setRequestHeader('X-API-SECRET', IO_SEC);
-    xhr.setRequestHeader('Content-Description', file.name);
-    xhr.setRequestHeader('Content-Length', file.size);
     xhr.setRequestHeader('Content-Type', file.type);
+    xhr.setRequestHeader('Content-Length', file.size);
+    xhr.setRequestHeader('Content-Description', btoa(unescape(encodeURIComponent(file.name))));
     xhr.setRequestHeader('Expect', '100-continue');
     xhr.onreadystatechange = function(evt) {
-      console.log(evt);
       if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
+        if (xhr.status == 201) {
           self.ulw.lineWidget.clear();
           var cm = self.met.editor;
           var res = $.parseJSON(evt.target.responseText);
@@ -91,8 +90,6 @@
         } else {
           console.log("XHR Error: " + xhr.status);
         }
-      } else {
-        console.log("readyState: " + xhr.readyState);
       }
     };
     xhr.upload.addEventListener("progress", function(e) {
@@ -100,10 +97,16 @@
     }, false);
     $('.progress-name').html(file.name);
     var reader = new FileReader();
-    reader.onload = function(evt) {
-      xhr.send(evt.target.result);
+    reader.onload = function(e) {
+      var data = e.target.result;
+      var length = data.length;
+      var ui8Data = new Uint8Array(length);
+      for (var i = 0; i < length; i++) {
+        ui8Data[i] = data.charCodeAt(i) & 0xff;
+      }
+      xhr.send(ui8Data);
     };
-    reader.readAsArrayBuffer(file);
+    reader.readAsBinaryString(file);
     // xhr.send(file);
   };
 
