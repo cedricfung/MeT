@@ -178,7 +178,7 @@
           }
           clearMarker();
           b.addClass('block-current');
-          var h1 = b.position().top;
+          var h1 = b.position().top - 16; // use the 16 to make the preview lower
           var t1 = $(self.previewWrapper).position().top;
           var h2 = self.editor.charCoords(self.editor.posFromIndex(r[0]), 'local').top;
           var t2 = $(self.inputWrapper).position().top;
@@ -206,7 +206,7 @@
       var posBottom = self.editor.posFromIndex(r[1]);
       var h1 = self.editor.charCoords(posTop, 'local').top;
       var t1 = $(self.inputWrapper).position().top;
-      var h2 = $(this).position().top;
+      var h2 = $(this).position().top - 16;
       var t2 = $(self.previewWrapper).position().top;
       syncTwo({h: h1, t: t1, sel: self.inputWrapper}, {h: h2, t: t2, sel: self.previewWrapper});
       lastTrackedRange = r;
