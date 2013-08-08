@@ -93,7 +93,9 @@
     worker.addEventListener('message', function(e) {
       switch (e.data.type) {
         case 'result': {
-          var result = $('<div/>').html(e.data.text).children().length;
+          var doc = document.implementation.createHTMLDocument('');
+          doc.documentElement.innerHTML = '<div id="__met_dummydummy__">' + e.data.text + '</div>';
+          var result = $(doc).find('#__met_dummydummy__ > .marked-block').length;
           var current = $(met.mbsa).length;
           if (result !== current) {
             met.needFullRender = true;
