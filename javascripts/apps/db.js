@@ -36,8 +36,8 @@
     query.store.openCursor(query.range, query.order).onsuccess = function(evt) {
       var cursor = evt.target.result;
       if ((query.limit === 0 || query.limit > count) && cursor) {
-        posts.push(cursor.value);
         count++;
+        posts.push(cursor.value);
         cursor.continue();
       } else {
         onSuccess(posts);

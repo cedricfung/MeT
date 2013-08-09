@@ -21,7 +21,7 @@
     $(self.total + ' .line').html(editor.lineCount());
     $(self.total + ' .char').html(editor.getValue().length);
 
-    self.timer = setInterval(function(){self.refresh(self)}, 1000);
+    self.timer = setInterval(function(){self.refresh(self);}, 1000);
   };
 
   Status.prototype.show = function(self) {
@@ -41,7 +41,7 @@
       }
     });
 
-    $(self.sel).click(function(evt) {
+    $(self.sel).click(function() {
       self.hide(self);
     });
   };

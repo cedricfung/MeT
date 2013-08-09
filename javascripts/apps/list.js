@@ -41,12 +41,12 @@
   FileList.prototype.refresh = function(self) {
     clearTimeout(self.timer);
     self.populate(self);
-    self.timer = setInterval(function(){self.populate(self)}, 6400);
+    self.timer = setInterval(function(){self.populate(self);}, 6400);
   };
 
   FileList.prototype.setupView = function(self) {
     self._setupView(self);
-    $(window).resize(function(evt) {
+    $(window).resize(function() {
       self._setupView(self);
     });
   };
