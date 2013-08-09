@@ -28,13 +28,14 @@
   };
 
   FileList.prototype.show = function(self) {
-    $(self.osel).animate({'margin-left': '0px'}, 64);
-    self.refresh(self);
+    $(self.osel).animate({'margin-left': '0px'}, 128, 'linear', function(){
+      self.refresh(self);
+    });
   };
 
   FileList.prototype.hide = function(self) {
-    $(self.osel).animate({'margin-left': '-' + $(self.sel).width() + 'px'}, 64);
     clearTimeout(self.timer);
+    $(self.osel).animate({'margin-left': '-' + $(self.sel).width() + 'px'}, 128);
   };
 
   FileList.prototype.refresh = function(self) {
@@ -76,7 +77,7 @@
     $(self.sel + ' .add').click(function(evt) {
       evt.preventDefault();
       self.met.newPost(function(){
-        self.refresh(self);
+        self.hide(self);
       });
     });
 

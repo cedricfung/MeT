@@ -4,26 +4,26 @@
   var IO_KEY = "i.repo.io";
   var IO_SEC = "f8f21d8fba3698d5c5c65c6538913adbfe9ab060";
 
-  var Uploader = function(wrapper, met) {
-    this.wrapper = '.CodeMirror pre';
+  var Uploader = function(met) {
     this.met = met;
-    this.init(this);
+    this.des = {};
     this.ulw = {};
+    this.init(this);
   };
 
   Uploader.prototype.init = function(self) {
     var cm = self.met.editor;
 
+    window.addEventListener("dragover",function(e){
+      e.preventDefault();
+    },false);
+    window.addEventListener("drop",function(e){
+      e.preventDefault();
+    },false);
+
     $('.CodeMirror-code').on('dragover', 'pre', function(e){
       self.setupDnDArea(self, cm, e);
       e.preventDefault();
-      e.stopPropagation();
-    });
-
-    $('.CodeMirror-code').on('dragenter', 'pre', function(e){
-      self.setupDnDArea(self, cm, e);
-      e.preventDefault();
-      e.stopPropagation();
     });
 
     $('.CodeMirror-code').on('dragleave', 'pre', function(e){
@@ -31,7 +31,6 @@
         self.ulw.lineWidget.clear();
       }
       e.preventDefault();
-      e.stopPropagation();
     });
 
     $('.CodeMirror-code').on('drop', 'pre', function(e){
@@ -46,7 +45,6 @@
         }
       }
       e.preventDefault();
-      e.stopPropagation();
     });
   };
 
@@ -110,8 +108,8 @@
     // xhr.send(file);
   };
 
-  return function(wrapper, met) {
-    return new Uploader(wrapper, met);
+  return function(met) {
+    return new Uploader(met);
   };
 
 }); }());

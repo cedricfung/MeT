@@ -377,6 +377,6 @@ code,
   z-index: 2;
 }
 
-.CodeMirror-scroll pre * {
+.CodeMirror-code > pre * {
   pointer-events: none;
 }

@@ -238,7 +238,11 @@
       if (self.editorMarker !== null) self.editorMarker.clear();
       $(self.mbsa).removeClass('block-current');
     };
+  };
 
+  MeT.prototype.clearTop = function() {
+    $(this.previewWrapper).css('top', 0);
+    $(this.inputWrapper).css('top', 0);
   };
 
   MeT.prototype.getEditor = function() {
@@ -263,7 +267,7 @@
 
   MeT.prototype.newPost = function(callback) {
     this.currentPost = {};
-    this.editor.setValue('');
+    this.editor.setValue('New MeT Post\n============');
     this.editor.clearHistory();
     callback();
   };
@@ -272,6 +276,7 @@
     var self = this;
     if (key !== self.currentPost.created_at) {
       self.db.getPost({query: key}, function(p) {
+        self.clearTop();
         self.currentPost = p;
         self.editor.setValue(self.currentPost.content);
         self.editor.clearHistory();
@@ -283,6 +288,7 @@
   MeT.prototype.deletePost = function(key, callback) {
     var self = this;
     self.db.deletePost(key, function() {
+      self.clearTop();
       self.loadLastPost(self);
       callback();
     });
@@ -308,7 +314,7 @@
       self._met();
       list(self.listArea, self);
       status(self.statusArea, self);
-      uploader(self.inputWrapper, self);
+      uploader(self);
     });
     return self;
   };
