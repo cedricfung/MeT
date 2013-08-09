@@ -11,7 +11,7 @@
   };
 
   FileList.prototype.populate = function(self) {
-    self.db.getPosts(function(posts) {
+    self.db.getPosts({order: 'desc'}, function(posts) {
       var ul = $('<ul></ul>');
       $.each(posts, function(i, p){
         var item = $('<li class="list-item"></li>');

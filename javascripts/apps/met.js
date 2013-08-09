@@ -247,8 +247,7 @@
 
   MeT.prototype.loadLastPost = function(self) {
     self.currentPost = {};
-    self.db.getPosts(function(posts) {
-      var post = posts.slice(-1)[0];
+    self.db.getPost({index: 'updated_at', order: 'desc'}, function(post) {
       if (typeof post !== 'undefined') {
         self.currentPost = post;
         self.editor.setValue(self.currentPost.content);
@@ -272,7 +271,7 @@
   MeT.prototype.loadPost = function(key, callback) {
     var self = this;
     if (key !== self.currentPost.created_at) {
-      self.db.getPost({created_at: key}, function(p) {
+      self.db.getPost({query: key}, function(p) {
         self.currentPost = p;
         self.editor.setValue(self.currentPost.content);
         self.editor.clearHistory();
@@ -283,7 +282,7 @@
 
   MeT.prototype.deletePost = function(key, callback) {
     var self = this;
-    self.db.deletePost({created_at: key}, function() {
+    self.db.deletePost(key, function() {
       self.loadLastPost(self);
       callback();
     });

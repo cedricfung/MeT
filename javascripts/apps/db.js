@@ -19,14 +19,25 @@
     };
   };
 
-  DB.prototype.getPosts = function(onSuccess) {
-    var posts = [];
+  DB.prototype.buildQuery = function(kv) {
     var store = this.db.transaction(["posts"]).objectStore("posts");
+    return {
+      store: kv.index ? store.index(kv.index) : store,
+      range: kv.query ? IDBKeyRange.only(kv.query) : null,
+      order: kv.order === 'desc' ? 'prev' : 'next',
+      limit: kv.limit || 0
+    };
+  };
 
-    store.openCursor().onsuccess = function(evt) {
+  DB.prototype.getPosts = function(kv, onSuccess) {
+    var posts = [], count = 0;
+    var query = this.buildQuery(kv);
+
+    query.store.openCursor(query.range, query.order).onsuccess = function(evt) {
       var cursor = evt.target.result;
-      if (cursor) {
+      if ((query.limit === 0 || query.limit > count) && cursor) {
         posts.push(cursor.value);
+        count++;
         cursor.continue();
       } else {
         onSuccess(posts);
@@ -45,14 +56,15 @@
     };
   };
 
-  DB.prototype.getPost = function(data, onSuccess, onError) {
-    this.db.transaction("posts").objectStore("posts").get(data.created_at).onsuccess = function(evt) {
-      onSuccess(evt.target.result);
-    }
+  DB.prototype.getPost = function(kv, onSuccess) {
+    kv['limit'] = 1;
+    this.getPosts(kv, function(posts) {
+      onSuccess(posts[0]);
+    });
   };
 
-  DB.prototype.deletePost = function(data, onSuccess) {
-    this.db.transaction("posts", "readwrite").objectStore("posts").delete(data.created_at).onsuccess = function(evt) {
+  DB.prototype.deletePost = function(key, onSuccess) {
+    this.db.transaction("posts", "readwrite").objectStore("posts").delete(key).onsuccess = function(evt) {
       onSuccess();
     };
   };
