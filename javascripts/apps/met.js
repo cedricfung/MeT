@@ -132,6 +132,11 @@
       matchBrackets: true,
       showTrailingSpace: true,
       dragDrop: false,
+      undoDepth: 64,
+      historyEventDelay: 1000,
+      pollInterval: 1000,
+      workTime: 200,
+      workDelay: 1000,
       extraKeys: {
         Tab: function(cm) {
           if (cm.getSelection().length === 0) {
@@ -255,7 +260,7 @@
       if (typeof post !== 'undefined') {
         self.currentPost = post;
         self.editor.setValue(self.currentPost.content);
-        self.editor.clearHistory();
+        self.editor.setHistory(self.currentPost.history);
       } else {
         $.get(root + '/docs/index.md', function(md){
           self.editor.setValue(md);
@@ -279,7 +284,7 @@
         self.clearTop();
         self.currentPost = p;
         self.editor.setValue(self.currentPost.content);
-        self.editor.clearHistory();
+        self.editor.setHistory(self.currentPost.history);
         callback();
       });
     }
@@ -299,7 +304,8 @@
     if (self.editor.getValue() !== self.currentPost.content) {
       $.extend(self.currentPost, {
         title:  getTitle(self.editor.getValue()),
-        content: self.editor.getValue()
+        content: self.editor.getValue(),
+        history: self.editor.getHistory()
       });
       self.db.putPost(self.currentPost, function(key) {
         self.currentPost.created_at = key;
