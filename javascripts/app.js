@@ -8,6 +8,7 @@ require.config({
     uploader: 'apps/uploader',
     status: 'apps/status',
     list: 'apps/list',
+    twitter: 'apps/twitter',
     met: 'apps/met'
   },
   shim: {
@@ -62,7 +63,8 @@ require.config({
     uploader: ['zepto'],
     status: ['zepto'],
     list: ['db', 'zepto'],
-    met: ['uploader', 'status', 'list', 'db', 'zepto', 'cmgfm', 'marked']
+    twitter: ['zepto'],
+    met: ['twitter', 'uploader', 'status', 'list', 'db', 'zepto', 'cmgfm', 'marked']
   }
 });
 

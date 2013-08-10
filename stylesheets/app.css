@@ -380,3 +380,11 @@ code,
 .CodeMirror-code > pre * {
   pointer-events: none;
 }
+
+
+/******************************
+ **** embed extern widget  ****
+ *****************************/
+.marked-tweet {
+  margin: 16px 0 32px;
+}

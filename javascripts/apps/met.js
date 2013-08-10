@@ -1,4 +1,4 @@
-(function() { define(['zepto', 'marked', 'db', 'list', 'status', 'uploader'], function($, marked, dbEngine, list, status, uploader) {
+(function() { define(['zepto', 'marked', 'db', 'list', 'status', 'uploader', 'twitter'], function($, marked, dbEngine, list, status, uploader, tweet) {
 
   var root = window.location.protocol + "//" + window.location.host;
 
@@ -363,6 +363,7 @@
       if (self.needFullRender || blocks.length === 0) {
         preview.html(marked(cm.getValue()));
         MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
+        $('.marked-tweet').each(function(i,t) { tweet(t); });
         self.needFullRender = false;
         return;
       }
@@ -419,6 +420,7 @@
           }
           startBlock.replaceWith(htmlOut);
           MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]); // TODO should make the changed maths reproduce only?
+          $('.marked-tweet').each(function(i,t) { tweet(t); });
 
           blocks = $(mbsa);
           if (blocks.length !== 0) {
