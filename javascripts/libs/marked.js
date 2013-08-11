@@ -1092,7 +1092,7 @@ if (this.options.blocks) { // The patched version
         + '</p>\n';
     }
     case 'tweet': {
-      return '<div class="marked-block marked-widget marked-tweet" id="tweet-' + this.token.text +'" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
+      return '<div class="marked-block marked-widget marked-tweet" data-id="' + this.token.text + '" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
     }
     case 'gist': {
       return '<div class="marked-block marked-widget marked-gist" data-id="' + this.token.text + '" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';

@@ -1,6 +1,6 @@
 (function() { define(['zepto'], function($) {
 
-  var API = "https://api.twitter.com/1/statuses/oembed.json?omit_script=true&maxwidth=550&align=center&id=";
+  var API = "https://api.twitter.com/1/statuses/oembed.json?omit_script=true&id=";
   var caching = {};
 
   // https://dev.twitter.com/docs/intents/events
@@ -15,7 +15,7 @@
 
   // https://dev.twitter.com/docs/api/1.1/get/statuses/oembed
   return function(ele) {
-    var id = $(ele).attr('id').split('-')[1];
+    var id = $(ele).attr('data-id');
     if (caching[id]) {
       $(ele).html(caching[id]);
     } else {
