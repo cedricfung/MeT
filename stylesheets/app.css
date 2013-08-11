@@ -388,3 +388,11 @@ code,
 .marked-tweet {
   margin: 16px 0 32px;
 }
+
+.marked-gist .gist .gist-file .gist-data {
+  display: none;
+}
+
+.marked-gist .gist .gist-file .gist-meta {
+  cursor: pointer;
+}

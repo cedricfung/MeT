@@ -17,7 +17,7 @@ var block = {
   fences: noop,
   math: /^ *(?:(?:(\${2,})([\S\s]+?)\s*\1)|(?:\\\[([\S\s]+?)\s*\\\])) *(?:\n+|$)/,
   tweet: /^ *@@https:\/\/twitter.com\/.+\/status\/(\d+)@@ *(?:\n+|$)/,
-  gist: /^ *@@https:\/\/gist.github.com\/(.+\/\d+)\.js@@ *(?:\n+|$)/,
+  gist: /^ *@@https:\/\/gist.github.com\/(.+\/\d+)@@ *(?:\n+|$)/,
   hr: /^( *[-*_]){3,} *(?:\n+|$)/,
   heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
   nptable: noop,
@@ -1079,10 +1079,10 @@ if (this.options.blocks) { // The patched version
         + '</p>\n';
     }
     case 'tweet': {
-      return '<div class="marked-block marked-tweet" id="tweet-' + this.token.text +'" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
+      return '<div class="marked-block marked-widget marked-tweet" id="tweet-' + this.token.text +'" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
     }
     case 'gist': {
-      return '<div class="marked-block marked-gist" data-id="' + this.token.text + '" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
+      return '<div class="marked-block marked-widget marked-gist" data-id="' + this.token.text + '" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
     }
   }
 } else { //origin one

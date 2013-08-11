@@ -4,10 +4,13 @@
 
   var renderGist = function(ele, gist) {
     var css = "https://gist.github.com" + gist.stylesheet;
-    if($('link[href="' + css + '"]').length==0){
+    if($('link[href="' + css + '"]').length === 0){
       $('head').append('<link rel="stylesheet" type="text/css" media="screen" href="' + css + '" />');
     }
     $(ele).html(gist.div);
+    $('.gist-meta', $(ele)).click(function() {
+      $('.gist-data', $(ele)).toggle();
+    });
   };
 
   // http://stackoverflow.com/questions/9154026/jquery-dynamically-load-a-gist-embed
