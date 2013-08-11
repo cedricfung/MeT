@@ -2,6 +2,12 @@
 
   var root = window.location.protocol + "//" + window.location.host;
 
+  var mbCount = function(text) {
+    var doc = document.implementation.createHTMLDocument('');
+    doc.documentElement.innerHTML = '<div id="__met_dummydummy__">' + text + '</div>';
+    return $(doc).find('#__met_dummydummy__ > .marked-block').length;
+  };
+
   Date.prototype.format = function(format) {
     var o = {
       "M+" : this.getMonth()+1, //month
@@ -93,9 +99,7 @@
     worker.addEventListener('message', function(e) {
       switch (e.data.type) {
         case 'result': {
-          var doc = document.implementation.createHTMLDocument('');
-          doc.documentElement.innerHTML = '<div id="__met_dummydummy__">' + e.data.text + '</div>';
-          var result = $(doc).find('#__met_dummydummy__ > .marked-block').length;
+          var result = mbCount(e.data.text);
           var current = $(met.mbsa).length;
           if (result !== current) {
             met.needFullRender = true;
@@ -419,8 +423,6 @@
             blocks[i].remove();
           }
           startBlock.replaceWith(htmlOut);
-          MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]); // TODO should make the changed maths reproduce only?
-          $('.marked-tweet').each(function(i,t) { tweet(t); });
 
           blocks = $(mbsa);
           if (blocks.length !== 0) {
@@ -435,6 +437,15 @@
                 }
               }
             });
+          }
+
+          var n = mbCount(htmlOut);
+          for (i = sb; i < sb + n; i++) {
+            var b = blocks[i];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub, b]);
+            if ($(b).hasClass('marked-tweet')) {
+              tweet($(b));
+            }
           }
 
           if (baseBlock !== null) {
