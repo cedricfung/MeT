@@ -95,4 +95,11 @@ require(['zepto', 'met'], function($, met) {
     setupHeight();
   });
 
+  $('#repoWarning #warning-pass').click(function(e) {
+    e.preventDefault();
+    $('#repoWarning').animate({opacity: 0}, 640, 'linear', function(){
+      $('#repoWarning').remove();
+    });
+  });
+
 });
