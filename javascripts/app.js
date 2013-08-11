@@ -10,6 +10,7 @@ require.config({
     list: 'apps/list',
     twitter: 'apps/twitter',
     github: 'apps/github',
+    youtube: 'apps/youtube',
     met: 'apps/met'
   },
   shim: {
@@ -66,7 +67,8 @@ require.config({
     list: ['db', 'zepto'],
     twitter: ['zepto'],
     github: ['zepto'],
-    met: ['github', 'twitter', 'uploader', 'status', 'list', 'db', 'zepto', 'cmgfm', 'marked']
+    youtube: ['zepto'],
+    met: ['youtube', 'github', 'twitter', 'uploader', 'status', 'list', 'db', 'zepto', 'cmgfm', 'marked']
   }
 });
 

@@ -1,4 +1,5 @@
-(function() { define(['zepto', 'marked', 'db', 'list', 'status', 'uploader', 'twitter', 'github'], function($, marked, dbEngine, list, status, uploader, tweet, gist) {
+(function() { define(['zepto', 'marked', 'db', 'list', 'status', 'uploader', 'twitter', 'github', 'youtube'],
+                     function($, marked, dbEngine, list, status, uploader, tweet, gist, youtube) {
 
   var root = window.location.protocol + "//" + window.location.host;
 
@@ -373,6 +374,7 @@
         MathJax.Hub.Queue(["Typeset",MathJax.Hub, preview[0]]);
         $('.marked-tweet').each(function(i,t) { tweet(t); });
         $('.marked-gist').each(function(i,t) { gist(t); });
+        $('.marked-youtube').each(function(i,t) { youtube(t); });
         self.needFullRender = false;
         return;
       }
@@ -450,6 +452,7 @@
             MathJax.Hub.Queue(["Typeset",MathJax.Hub, b]);
             if ($(b).hasClass('marked-tweet')) { tweet($(b)); }
             if ($(b).hasClass('marked-gist')) { gist($(b)); }
+            if ($(b).hasClass('marked-youtube')) { youtube($(b)); }
           }
 
           if (baseBlock !== null) {
