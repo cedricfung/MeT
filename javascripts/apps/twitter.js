@@ -18,9 +18,6 @@
     var id = $(ele).attr('id').split('-')[1];
     if (caching[id]) {
       $(ele).html(caching[id]);
-      if (typeof twttr !== 'undefined') {
-        twttr.widgets.load($(ele)[0]);
-      }
     } else {
       $.ajax({
         url: API + id,
@@ -30,9 +27,6 @@
         success: function(res) {
           caching[id] = res.html;
           $(ele).html(caching[id]);
-          if (typeof twttr !== 'undefined') {
-            twttr.widgets.load($(ele)[0]);
-          }
         }
       });
     }

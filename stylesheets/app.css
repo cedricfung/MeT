@@ -383,22 +383,6 @@ code,
 
 
 /******************************
- **** embed extern widget  ****
- *****************************/
-.marked-tweet {
-  margin: 16px 0 24px;
-}
-
-.marked-gist .gist .gist-file .gist-data {
-  display: none;
-}
-
-.marked-gist .gist .gist-file .gist-meta {
-  cursor: pointer;
-}
-
-
-/******************************
  **** media thumb behavior ****
  *****************************/
 .marked-block > img {
@@ -415,4 +399,24 @@ code,
   border: 0 none;
   cursor: -webkit-zoom-out;
   cursor: -moz-zoom-out;
+}
+
+
+/******************************
+ **** embed extern widget  ****
+ *****************************/
+.marked-gist .gist .gist-file .gist-data {
+  display: none;
+}
+
+.marked-gist .gist .gist-file .gist-meta {
+  cursor: pointer;
+}
+
+.marked-tweet {
+  margin: 8px 0 16px;
+}
+
+.marked-tweet > blockquote {
+  border-color: #00ACEE;
 }
