@@ -386,7 +386,7 @@ code,
  **** embed extern widget  ****
  *****************************/
 .marked-tweet {
-  margin: 16px 0 32px;
+  margin: 16px 0 24px;
 }
 
 .marked-gist .gist .gist-file .gist-data {
@@ -395,4 +395,24 @@ code,
 
 .marked-gist .gist .gist-file .gist-meta {
   cursor: pointer;
+}
+
+
+/******************************
+ **** media thumb behavior ****
+ *****************************/
+.marked-block > img {
+  max-height: 64px;
+  display: block;
+  margin: 8px auto 0;
+  border: 4px solid #EFEFEF;
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in;
+}
+
+.marked-block > img.expanded {
+  max-height: 100%;
+  border: 0 none;
+  cursor: -webkit-zoom-out;
+  cursor: -moz-zoom-out;
 }

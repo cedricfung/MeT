@@ -198,6 +198,10 @@
       });
     });
 
+    self.preview.on('click', 'p.marked-block > img', function(evt) {
+      $(this).toggleClass('expanded');
+    });
+
     self.preview.on('click', 'a', function(evt) {
       window.open($(this).attr('href'), '_blank');
       evt.stopPropagation(); // Zepto doesn't work

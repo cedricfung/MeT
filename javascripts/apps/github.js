@@ -5,7 +5,7 @@
   var renderGist = function(ele, gist) {
     var css = "https://gist.github.com" + gist.stylesheet;
     if($('link[href="' + css + '"]').length === 0){
-      $('head').append('<link rel="stylesheet" type="text/css" media="screen" href="' + css + '" />');
+      $('head').prepend('<link rel="stylesheet" type="text/css" media="screen" href="' + css + '" />');
     }
     $(ele).html(gist.div);
     $('.gist-meta', $(ele)).click(function() {
