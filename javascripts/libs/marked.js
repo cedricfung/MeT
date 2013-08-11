@@ -16,7 +16,8 @@ var block = {
   code: /^( {4}[^\n]+\n*)+/,
   fences: noop,
   math: /^ *(?:(?:(\${2,})([\S\s]+?)\s*\1)|(?:\\\[([\S\s]+?)\s*\\\])) *(?:\n+|$)/,
-  tweet: /^ *@@https:\/\/twitter.com\/.+\/status\/(\d{8,})@@ *(?:\n+|$)/,
+  tweet: /^ *@@https:\/\/twitter.com\/.+\/status\/(\d+)@@ *(?:\n+|$)/,
+  gist: /^ *@@https:\/\/gist.github.com\/(.+\/\d+)\.js@@ *(?:\n+|$)/,
   hr: /^( *[-*_]){3,} *(?:\n+|$)/,
   heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
   nptable: noop,
@@ -233,6 +234,18 @@ Lexer.prototype.token = function(src, top) {
         begin: block_begin,
         end: (block_begin += cap[0].length) - 1,
         type: 'tweet',
+        text: cap[1]
+      });
+      continue;
+    }
+
+    // gist
+    if (cap = this.rules.gist.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        begin: block_begin,
+        end: (block_begin += cap[0].length) - 1,
+        type: 'gist',
         text: cap[1]
       });
       continue;
@@ -1067,6 +1080,9 @@ if (this.options.blocks) { // The patched version
     }
     case 'tweet': {
       return '<div class="marked-block marked-tweet" id="tweet-' + this.token.text +'" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
+    }
+    case 'gist': {
+      return '<div class="marked-block marked-gist" data-id="' + this.token.text + '" data-range="[' + [this.token.begin,this.token.end] + ']"></div>\n';
     }
   }
 } else { //origin one
