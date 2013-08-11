@@ -99,6 +99,7 @@ require(['zepto', 'met'], function($, met) {
     e.preventDefault();
     $('#repoWarning').animate({opacity: 0}, 640, 'linear', function(){
       $('#repoWarning').remove();
+      $('body').removeClass('withWarning');
     });
   });
 
