@@ -18,7 +18,7 @@ var block = {
   math: /^ *(?:(?:(\${2,})([\S\s]+?)\s*\1)|(?:\\\[([\S\s]+?)\s*\\\])) *(?:\n+|$)/,
   tweet: /^ *@@https:\/\/twitter.com\/.+\/status\/(\d+)@@ *(?:\n+|$)/,
   gist: /^ *@@https:\/\/gist.github.com\/(.+\/\d+)@@ *(?:\n+|$)/,
-  youtube: /^ *@@https:\/\/www.youtube.com\/watch\?v=(\w+)@@ *(?:\n+|$)/,
+  youtube: /^ *@@http(?:s*):\/\/www.youtube.com\/watch\?v=([^&]+)@@ *(?:\n+|$)/,
   hr: /^( *[-*_]){3,} *(?:\n+|$)/,
   heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
   nptable: noop,
