@@ -168,7 +168,13 @@
       var sTop = scrollTop();
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       var top = newTop(sy1.h, sy1.t, sy2.h, sy2.t, sTop);
-      $(sy1.sel).animate({top: top}, 300);
+      if (top >= 0) {
+        $(sy1.sel).css('top', top);
+      } else {
+        top = newTop(sy2.h, sy2.t, sy1.h, sy1.t, sTop);
+        window.scrollTo(0, scrollTop() + top - sy2.t);
+        $(sy2.sel).css('top', top)
+      }
     };
 
     var lastTrackedRange = [0,0];
@@ -234,10 +240,10 @@
       var posE = $(self.inputWrapper).position().top;
       sTop = sTop - topPadding > 0 ? sTop - topPadding : sTop;
       if ((sTop === 0 && posV < 0) || posV >= sTop) {
-        $(self.previewWrapper).animate({top: sTop}, 'fast');
+        $(self.previewWrapper).animate({top: sTop}, 64);
       }
       if ((sTop === 0 && posE < 0) || posE >= sTop) {
-        $(self.inputWrapper).animate({top: sTop}, 'fast');
+        $(self.inputWrapper).animate({top: sTop}, 64);
       }
     });
 
