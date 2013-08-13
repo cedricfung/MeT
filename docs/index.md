@@ -1,56 +1,110 @@
 MeT - The Markdown and LaTeX Editor You Should Have Met
 =======================================================
 
-I'm trying to build a cross-platform markdown editor, with inline \(LaTeX\) support. The goal of this project is a fast document creation tool, and should be accessible from all major operating systems.
+MeT is created as a cross platform Markdown editor, with basic LaTeX math equations support, some additional amazing features included, too.
 
 
-## Warranty
-
-This project is under heavy development and not yet be an alpha project, you shouldn't rely it to store your important documents.
-
-Though it's supposed to be reliable at anytime, the content is stored locally with the experimental HTML5 feature `IndexedDB`, I haven't do enough tests to see if all browsers would crash the database in certain situations.
 
 
-## Features
+## Screencast
 
-MeT is designed to be full compatible with markdown specification, extra features included. The \(LaTeX\) math equations should be compatible with the common specification, too.
-
-Below is a partial list of the features that distinguish MeT from other similar projects.
-
-1. Blazingly fast live preview, with increment parsing.
-2. Easily sync the preview and editor whenever you scroll or click each part.
-3. Available from all popular operating systems, each stroke will be stored in database offline.
-4. Instant image uploading just in the editor, through **drag and drop**.
-5. The simple interface, I love this, thought you may like it.
-
-![snapshot](images/snapshot.png)
+I'm trying to record a screencast to demonstrate some unique features of MeT, should be available soon.
 
 
-## Thanks to
-
-MeT is built upon latest web technologies, from many open source projects.
-
-1. CodeMirror.
-2. marked.
-3. Zepto.
 
 
-## TODO
+## Interface
 
-MeT is under active development.
+I prefer simple user interface, maybe cause I don't know how to draw and design.
 
-1. More test coverage, there are still known bugs.
-2. Performance improvement.
-3. ~~File lists~~.
-4. ~~Implement simple content observer mechanism~~.
-5. ~~Image uploading with DnD~~.
-6. ~~Status line to show words, lines etc~~.
-7. Spell checking, and auto-completion.
-8. Editing history, version system.
-9. Better editing layout with configurations.
-10. Sync with server, with encryption.
-11. Online document share.
-12. Sync to other blogging or publishing platforms.
-13. Improve uploading stability and usability.
-14. Keep a list for files uploaded.
-15. Support multiple files uploading.
+
+### File list
+
+There're only two white pane by default, but if you move your mouse to the left border of the browser, you get a fully functional file list.
+
+![2013-08-13-153917_2880x1800.png](https://o.repo.io/130813y6HE.png)
+
+
+### Status line
+
+The Vim like status line can be brought to front by move your mouse to the very bottom of the browser. Click it to dismiss it.
+
+
+### Image uploading
+
+Drag an image from anywhere to the position where you want the image to be inserted, of course, to the editing area, not the preview area.
+
+![2013-08-13-154228_2880x1800.png](https://o.repo.io/130813jOOZ.png)
+
+And yes, I provide free image uploading service to all MeT users.
+
+
+
+
+## LaTeX math
+
+Inline \(LaTeX\) math \(x^2 + y^2\), and block math
+
+\[\begin{aligned}
+x[x := N] & \equiv N \\
+y[x := N] & \equiv y, \text{ if } x \neq y \\
+(M_1\ M_2)[x := N] & \equiv (M_1[x := N])(M_2[x := N) \\
+(\lambda x.M)[x := N] & \equiv \lambda x.M \\
+(\lambda y.M)[x := N] & \equiv \lambda y.(M[x := N]), \text{ if } x \neq y, \text{ provided } y \notin FV(N)
+\end{aligned}\]
+
+
+
+
+## IndexedDB
+
+Your **each keystroke** is stored in local IndexedDB, this is and experimental HTML5 feature, only Firefox and Chrome support it.
+
+Someday I may add other local storage back-ends beside IndexedDB to support more browsers. But current work is to optimize the IndexedDB performance.
+
+A Firefox sync like function is under consideration.
+
+
+
+
+## Widgets
+
+
+The modern editor should facilitate the using great Internet products of our era, MeT supports Gist, YouTube and basic Tweet embedding, and more not promising.
+
+
+### Gist from GitHub
+
+MeT use double `@@` as the widget embedding identifier, just include the full gist URL.
+
+@@https://gist.github.com/vecio/6210604@@
+
+
+### Tweet
+
+You know, Twitter is not a friendly company to developers, so it's difficult to embed a fancy tweet into MeT. Just simple text based implementation, maybe blocked by Twitter someday.
+
+@@https://twitter.com/cedricfung/status/363698334919168001@@
+
+
+### YouTube video
+
+Nothing special from the gist.
+
+@@http://www.youtube.com/watch?v=4kUNMbuPw_Q@@
+
+
+
+
+## Roadmap
+
+This project has been developed for about 3 weeks, alongside the [IO](https://i.repo.io). I don't want to attract too many users to MeT, just want to keep improving it for my own use. Something in the roadmap:
+
+- The preview and editor pane sync issue.
+- File list, and image uploading bug fix.
+- Performance improvement.
+- Version and diff feature.
+- Spell checking, and auto-completion.
+- Configurable layout and theme.
+- Sync to server.
+- A blog engine based on MeT.
