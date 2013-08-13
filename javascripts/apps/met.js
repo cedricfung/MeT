@@ -287,7 +287,7 @@
 
   MeT.prototype.newPost = function(callback) {
     this.currentPost = {};
-    this.editor.setValue('New MeT Post\n============');
+    this.editor.setValue(new Date().format("yyyy-MM-dd h:mm:ss\n==================="));
     this.editor.clearHistory();
     callback();
   };
