@@ -5,11 +5,9 @@ MeT is created as a cross platform Markdown editor, with basic LaTeX math equati
 
 
 
-
 ## Screencast
 
 I'm trying to record a screencast to demonstrate some unique features of MeT, should be available soon.
-
 
 
 
